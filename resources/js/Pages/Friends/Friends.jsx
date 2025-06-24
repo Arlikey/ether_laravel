@@ -1,4 +1,4 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import AuthenticatedLayout from "@/Layouts/Layout";
 import { Head } from "@inertiajs/react";
 
 export default function Friends({ auth, friends }) {
@@ -7,11 +7,10 @@ export default function Friends({ auth, friends }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Friends
-                </h2>
-            }
+            header={{
+                icon: <i className="bi bi-people"></i>,
+                title: "Friends",
+            }}
         >
             <Head title="Friends" />
 

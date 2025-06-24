@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .btn-outline {
+        @apply border border-purple-600 text-purple-600 rounded-lg px-4 py-2 transition duration-200;
+    }
+
+    .btn-outline:hover {
+        @apply bg-purple-600 text-white;
+    }
+
+    .anonymous {
+        transform: translate(-45%, 25%);
+    }
+}

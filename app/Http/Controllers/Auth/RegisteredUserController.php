@@ -45,8 +45,7 @@ class RegisteredUserController extends Controller
 
         $user->profile()->create([
             'fullname' => '',
-            'bio' => '',
-            'avatar' => 'default.png',
+            'bio' => ''
         ]);
 
         event(new Registered($user));
