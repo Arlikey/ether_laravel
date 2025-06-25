@@ -7,12 +7,12 @@ import { Link } from "@inertiajs/react";
 export default function Header({ user, header, onResults }) {
     return (
         <div className="h-16 p-2 flex justify-between items-center">
-            <div></div>
-            <div className="flex gap-2.5 text-lg justify-center items-center">
+            <div className="flex-1"></div>
+            <div className="flex flex-1 gap-2.5 text-lg justify-center items-center">
                 {header?.icon}
                 <span>{header?.title}</span>
             </div>
-            <div className="flex">
+            <div className="flex flex-1 items-center justify-end gap-4">
                 <UserSearch onResults={onResults} />
                 {user ? (
                     <Dropdown>

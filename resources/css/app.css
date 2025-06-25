@@ -16,10 +16,18 @@
     }
 
     .user-profile-header {
-        @apply transition duration-200
+        @apply transition duration-200;
     }
 
     .user-profile-header:hover {
-        @apply scale-110
+        @apply scale-110;
     }
+}
+
+.user-search-input {
+    padding-inline-start: 2rem;
+}
+
+.user-search-icon {
+    transform: translateY(-50%);
 }
