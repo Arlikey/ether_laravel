@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Foundation\Application;
@@ -27,13 +28,11 @@ Route::get('/', function () {
     ]);
 })->name('/');
 
-Route::get('/friends', function () {
-    return Inertia::render('Friends/Friends', [
-        'friends' => auth()->user()->friends()->with('profile')->get()
-    ]);
-})->middleware(['auth', 'verified'])->name('friends');
-
-// Route::get('/profile/{user}', [ProfileController::class, 'index'])->name('profile.index');
+// Route::get('/friends', function () {
+//     return Inertia::render('Friends/Friends', [
+//         'friends' => auth()->user()->followings()->with('profile')->get()
+//     ]);
+// })->middleware(['auth', 'verified'])->name('friends');
 
 Route::get('/api/search-users', [ApiController::class, 'liveSearch']);
 
@@ -49,6 +48,9 @@ Route::middleware('auth')->group(function () {
     // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::prefix('follows')->group(function () {
+        Route::get('/', [FollowController::class, 'index'])->name('follow.index');
+    });
 });
 
 require __DIR__ . '/auth.php';

@@ -22,7 +22,6 @@ export default function UserSearch({ onResults }) {
             .get(`/api/search-users?q=${debouncedQuery}`)
             .then((res) => {
                 onResults(res.data);
-                console.log(res.data);
             })
             .catch(() => onResults([]));
     }, [debouncedQuery]);

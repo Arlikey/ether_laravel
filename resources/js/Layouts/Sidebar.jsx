@@ -14,12 +14,12 @@ export default function Sidebar({ user }) {
                 <span className="text-md">Home</span>
             </NavLink>
             <NavLink
-                href={route("friends")}
+                href={route("follow.index")}
                 className="flex flex-col px-4 py-2 pt-3 gap-1"
-                active={component === "Friends/Friends"}
+                active={component === "Follows/Follows"}
             >
                 <i className="bi bi-people text-xl"></i>
-                <span className="text-md">Friends</span>
+                <span className="text-md">Follows</span>
             </NavLink>
             <NavLink
                 href={route("profile.self")}

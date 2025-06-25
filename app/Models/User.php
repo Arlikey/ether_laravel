@@ -43,12 +43,30 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function friends()
+    /**
+     * Followings of user
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function followings()
     {
-        return $this->belongsToMany(User::class, 'friendship', 'user_id', 'friend_id')
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id')
             ->withTimestamps();
     }
 
+    /**
+     * Followers of user
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id')
+            ->withTimestamps();
+    }
+
+    /**
+     * User Profile
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function profile()
     {
         return $this->hasOne(UserProfile::class);
