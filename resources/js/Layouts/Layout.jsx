@@ -9,6 +9,7 @@ import UserSearch from "@/Components/UserSearch";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import FollowButton from "@/Components/FollowButton";
+import UserElement from "@/Components/UserElement";
 
 export default function Authenticated({ auth, children, header }) {
     const [searchResults, setSearchResults] = useState(null);
@@ -28,35 +29,20 @@ export default function Authenticated({ auth, children, header }) {
                         children
                     ) : (
                         <>
-                            <h2 className="text-xl font-semibold mb-4">
-                                Search results:
-                            </h2>
-                            {searchResults.length > 0 ? (
-                                <ul className="space-y-2">
-                                    {searchResults.map((user) => (
-                                        <li
-                                            key={user.id}
-                                            className="p-4 bg-white rounded shadow"
-                                        >
-                                            <NavLink
-                                                className="font-semibold"
-                                                href={route(
-                                                    "profile.index",
-                                                    user.username
-                                                )}
-                                            >
-                                                {user.username}
-                                            </NavLink>
-                                            <FollowButton
-                                                isFollowing={user.isFollowing}
-                                                id={user.id}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p>No users found.</p>
-                            )}
+                            <div className="flex flex-1 flex-col">
+                                <p className="text-xl ml-6 mt-4 mb-6 text-gray-700">Search results:</p>
+                                {searchResults.length > 0 ? (
+                                    <ul className="flex flex-col flex-1">
+                                        {searchResults.map((user) => (
+                                            <li key={user.id}>
+                                                <UserElement user={user} />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>No users found.</p>
+                                )}
+                            </div>
                         </>
                     )}
                 </main>

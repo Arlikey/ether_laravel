@@ -2,15 +2,22 @@ import axios from "axios";
 import { useState } from "react";
 import PrimaryButton from "./PrimaryButton";
 
-export default function FollowButton({ isFollowing, id }) {
-    const [following, setFollowing] = useState(isFollowing);
+export default function FollowButton({
+    isFollowing: Following,
+    id,
+    onUnfollow = () => {},
+}) {
+    const [isFollowing, setFollowing] = useState(Following);
     const [loading, setLoading] = useState(false);
 
-    const handleFollow = async () => {
+    const handleFollow = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         setLoading(true);
         try {
-            if (following) {
+            if (isFollowing) {
                 await axios.patch(route("follows.unfollow", id));
+                onUnfollow();
                 setFollowing(false);
             } else {
                 await axios.patch(route("follows.follow", id));
@@ -23,7 +30,7 @@ export default function FollowButton({ isFollowing, id }) {
         }
     };
 
-    return following ? (
+    return isFollowing ? (
         <PrimaryButton
             as="button"
             onClick={handleFollow}

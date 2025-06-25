@@ -11,17 +11,38 @@ class FollowController extends Controller
     public function index()
     {
         $authUser = auth()->user();
-        $follows = $authUser->followings()->with('profile')->get()->map(function ($user) use ($authUser) {
-            return [
-                'id' => $user->id,
-                'username' => $user->username,
-                'profile' => $user->profile,
-                'isFollowing' => $authUser->isFollowing($user->id),
-            ];
-        });
-        ;
+
+        $followings = $authUser
+            ->followings()
+            ->with('profile')
+            ->get()
+            ->map(function ($user) use ($authUser) {
+                return [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'profile' => $user->profile,
+                    'followingSince' => $user->pivot->created_at,
+                    'isFollowing' => true
+                ];
+            });
+
+        $followers = $authUser
+            ->followers()
+            ->with('profile')
+            ->get()
+            ->map(function ($user) use ($authUser) {
+                return [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'profile' => $user->profile,
+                    'followedBySince' => $user->pivot->created_at,
+                    'isFollowing' => $authUser->isFollowing($user->id)
+                ];
+            });
+
         return Inertia::render('Follows/Follows', [
-            'follows' => $follows
+            'followings' => $followings,
+            'followers' => $followers,
         ]);
     }
     public function follow(Request $request)
