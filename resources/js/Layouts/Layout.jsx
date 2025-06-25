@@ -9,14 +9,14 @@ import UserSearch from "@/Components/UserSearch";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 
-export default function Authenticated({ user, children, header }) {
+export default function Authenticated({ auth, children, header }) {
     const [searchResults, setSearchResults] = useState(null);
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
-            <Header user={user} header={header} />
+            <Header user={auth?.user} header={header} onResults={setSearchResults} />
             <div className="body flex flex-1">
-                <Sidebar />
+                <Sidebar user={auth?.user}/>
 
                 <main className="flex flex-1 rounded-tl-xl border border-gray-300 overflow-y-auto max-h-[calc(100vh-4rem)]">
                     {searchResults === null ? (
@@ -37,7 +37,7 @@ export default function Authenticated({ user, children, header }) {
                                                 className="font-semibold"
                                                 href={route(
                                                     "profile.index",
-                                                    user.id
+                                                    user.username
                                                 )}
                                             >
                                                 {user.username}

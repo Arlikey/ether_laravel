@@ -1,12 +1,12 @@
 import AuthenticatedLayout from "@/Layouts/Layout";
-import GuestLayout from "@/Layouts/GuestLayout";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import UserAvatar from "@/Components/UserAvatar";
 
-export default function Profile({ auth, user }) {
+export default function Profile({user}) {
+    const { auth } = usePage().props;
     return (
         <AuthenticatedLayout
-            user={auth.user}
+            auth={auth}
             header={{
                 icon: <UserAvatar avatar={user.profile.avatar} alt={user.username}/>,
                 title: user.username,

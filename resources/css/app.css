@@ -14,4 +14,12 @@
     .anonymous {
         transform: translate(-45%, 25%);
     }
+
+    .user-profile-header {
+        @apply transition duration-200
+    }
+
+    .user-profile-header:hover {
+        @apply scale-110
+    }
 }

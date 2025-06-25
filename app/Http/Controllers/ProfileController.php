@@ -20,7 +20,7 @@ class ProfileController extends Controller
 
     public function index(Request $request)
     {
-        $user = User::with('profile')->findOrFail($request->user);
+        $user = User::with('profile')->where('username', '=', $request->user)->firstOrFail();
         
         return Inertia::render('Profile/Profile', [
             'user' => $user

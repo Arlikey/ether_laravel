@@ -5,7 +5,6 @@ export default function UserSearch({ onResults }) {
     const [query, setQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
 
-    // Debounce для уменьшения количества запросов
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedQuery(query);
@@ -15,13 +14,16 @@ export default function UserSearch({ onResults }) {
 
     useEffect(() => {
         if (debouncedQuery === "") {
-            onResults(null); // вернуть основной контент
+            onResults(null);
             return;
         }
 
         axios
             .get(`/api/search-users?q=${debouncedQuery}`)
-            .then((res) => onResults(res.data))
+            .then((res) => {
+                onResults(res.data);
+                console.log(res.data);
+            })
             .catch(() => onResults([]));
     }, [debouncedQuery]);
 

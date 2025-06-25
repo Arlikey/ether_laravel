@@ -20,7 +20,6 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Home', [
-        
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -28,22 +27,26 @@ Route::get('/', function () {
     ]);
 })->name('/');
 
-Route::get('/home', function () {
-    return Inertia::render('Home');
-})->middleware(['auth', 'verified'])->name('home');
-
 Route::get('/friends', function () {
     return Inertia::render('Friends/Friends', [
         'friends' => auth()->user()->friends()->with('profile')->get()
     ]);
 })->middleware(['auth', 'verified'])->name('friends');
 
-Route::get('/profile/{user}', [ProfileController::class, 'index'])->name('profile.index');
+// Route::get('/profile/{user}', [ProfileController::class, 'index'])->name('profile.index');
 
 Route::get('/api/search-users', [ApiController::class, 'liveSearch']);
 
+Route::get('/profile/{user}', [ProfileController::class, 'index'])->name('profile.index');
+Route::get('/my-profile', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+    return redirect()->route('profile.index', auth()->user()->username);
+})->name('profile.self');
+
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

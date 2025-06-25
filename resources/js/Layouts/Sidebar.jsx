@@ -1,7 +1,7 @@
 import NavLink from "@/Components/NavLink";
 import { usePage } from "@inertiajs/react";
 
-export default function Sidebar() {
+export default function Sidebar({user}) {
     const { url, component } = usePage();
     return (
         <div className="w-20 flex flex-col py-4">
@@ -22,9 +22,9 @@ export default function Sidebar() {
                 <span className="text-md">Friends</span>
             </NavLink>
             <NavLink
-                href={route("profile.edit")}
+                href={route("profile.self")}
                 className="flex flex-col px-4 py-2 pt-3 gap-1"
-                active={component === "Profile/Edit"}
+                active={component === "Profile/Profile"}
             >
                 <i className="bi bi-person text-xl"></i>
                 <span className="text-md">Profile</span>

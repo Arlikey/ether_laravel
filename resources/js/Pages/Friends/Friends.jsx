@@ -1,12 +1,13 @@
 import AuthenticatedLayout from "@/Layouts/Layout";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
-export default function Friends({ auth, friends }) {
+export default function Friends({ friends }) {
+    const { auth } = usePage().props;
     friends = friends || [];
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
+            auth={auth}
             header={{
                 icon: <i className="bi bi-people"></i>,
                 title: "Friends",

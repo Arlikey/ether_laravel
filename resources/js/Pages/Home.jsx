@@ -1,20 +1,20 @@
-import AuthenticatedLayout from '@/Layouts/Layout';
-import { Head } from '@inertiajs/react';
+import AuthenticatedLayout from "@/Layouts/Layout";
+import { Head, usePage } from "@inertiajs/react";
 
-export default function Home({ auth }) {
+export default function Home() {
+    const { auth } = usePage().props;
     return (
         <AuthenticatedLayout
-            user={auth.user}
+            auth={auth}
             header={{
-                icon: <i className='bi bi-house'></i>,
-                title: 'Home'
+                icon: <i className="bi bi-house"></i>,
+                title: "Home",
             }}
         >
             <Head title="Home" />
 
             <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                </div>
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8"></div>
             </div>
         </AuthenticatedLayout>
     );
