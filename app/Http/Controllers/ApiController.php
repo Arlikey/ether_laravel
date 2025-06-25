@@ -9,11 +9,19 @@ class ApiController extends Controller
 {
     public function liveSearch(Request $request)
     {
-        $query = $request->input('q');
-
-        $users = User::where('username', 'like', "%{$query}%")
+        $authUser = auth()->user();
+        $users = User::where('username', 'like', "%{$request->q}%")
+            ->where('id', '!=', $authUser->id)
             ->with('profile')
-            ->get();
+            ->get()
+            ->map(function ($user) use ($authUser) {
+                return [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'profile' => $user->profile,
+                    'isFollowing' => $authUser->isFollowing($user->id),
+                ];
+            });
 
         return response()->json($users);
     }

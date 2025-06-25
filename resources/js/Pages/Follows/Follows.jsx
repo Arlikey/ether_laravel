@@ -1,5 +1,7 @@
+import FollowButton from "@/Components/FollowButton";
+import UserAvatar from "@/Components/UserAvatar";
 import AuthenticatedLayout from "@/Layouts/Layout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 
 export default function Friends({ follows }) {
     const { auth } = usePage().props;
@@ -15,24 +17,32 @@ export default function Friends({ follows }) {
         >
             <Head title="Follows" />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            {follows.length > 0 ? (
-                                <ul>
-                                    {follows.map((follow) => (
-                                        <li key={follow.id}>
-                                            {follow.username}
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p>No follows found.</p>
-                            )}
-                        </div>
-                    </div>
-                </div>
+            <div className="flex flex-1">
+                {follows.length > 0 ? (
+                    <ul className="flex flex-col flex-1">
+                        {follows.map((user) => (
+                            <li
+                                className="flex justify-between items-center pl-4 pr-8 py-4 border-b border-gray-300"
+                                key={user.id}
+                            >
+                                <div className="flex gap-2 items-center">
+                                    <UserAvatar
+                                        avatar={user?.profile?.avatar}
+                                        alt={user?.username}
+                                        size={64}
+                                    />
+                                    <span>{user.username}</span>
+                                </div>
+                                <FollowButton
+                                    isFollowing={user.isFollowing}
+                                    id={user.id}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No follows found.</p>
+                )}
             </div>
         </AuthenticatedLayout>
     );

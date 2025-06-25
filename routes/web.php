@@ -49,7 +49,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::prefix('follows')->group(function () {
-        Route::get('/', [FollowController::class, 'index'])->name('follow.index');
+        Route::get('/', [FollowController::class, 'index'])->name('follows.index');
+        Route::patch('/follow/{id}', [FollowController::class, 'follow'])->name('follows.follow');
+        Route::patch('/unfollow/{id}', [FollowController::class, 'unfollow'])->name('follows.unfollow');
     });
 });
 

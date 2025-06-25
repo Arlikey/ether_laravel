@@ -8,15 +8,20 @@ import { Link, useForm } from "@inertiajs/react";
 import UserSearch from "@/Components/UserSearch";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import FollowButton from "@/Components/FollowButton";
 
 export default function Authenticated({ auth, children, header }) {
     const [searchResults, setSearchResults] = useState(null);
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
-            <Header user={auth?.user} header={header} onResults={setSearchResults} />
+            <Header
+                user={auth?.user}
+                header={header}
+                onResults={setSearchResults}
+            />
             <div className="body flex flex-1">
-                <Sidebar user={auth?.user}/>
+                <Sidebar user={auth?.user} />
 
                 <main className="flex flex-1 rounded-tl-xl border border-gray-300 overflow-y-auto max-h-[calc(100vh-4rem)]">
                     {searchResults === null ? (
@@ -42,6 +47,10 @@ export default function Authenticated({ auth, children, header }) {
                                             >
                                                 {user.username}
                                             </NavLink>
+                                            <FollowButton
+                                                isFollowing={user.isFollowing}
+                                                id={user.id}
+                                            />
                                         </li>
                                     ))}
                                 </ul>

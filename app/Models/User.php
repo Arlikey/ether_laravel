@@ -63,6 +63,11 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function isFollowing(string $id)
+    {
+        return $this->followings->contains($id);
+    }
+
     /**
      * User Profile
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
