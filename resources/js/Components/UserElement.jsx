@@ -1,8 +1,32 @@
 import { Link } from "@inertiajs/react";
+import { useState, useEffect } from "react";
 import { FollowButton } from "./FollowButton";
 import UserAvatar from "./UserAvatar";
 
-export function UserElement({ user, onFollowChange, className = "" }) {
+export function UserElement({
+    user: initialUser,
+    className = "",
+    onUserChange,
+}) {
+    const [user, setUser] = useState(initialUser);
+
+    useEffect(() => {
+        setUser(initialUser);
+    }, [initialUser]);
+
+    const handleFollowChange = async (isNowFollowing) => {
+        const updatedUser = {
+            ...user,
+            isFollowing: isNowFollowing,
+            followersCount: user.followersCount + (isNowFollowing ? 1 : -1),
+            followingSince: isNowFollowing ? new Date().toISOString() : null,
+        };
+        setUser(updatedUser);
+        if (onUserChange) {
+            onUserChange(updatedUser);
+        }
+    };
+
     return (
         <div
             className={`min-h-[96px] transition-all duration-300 ease-in-out group hover:bg-gray-100 hover:shadow-lg rounded-lg overflow-hidden border border-gray-300 m-4 p-4 flex flex-col gap-2 ${className}`}
@@ -52,18 +76,14 @@ export function UserElement({ user, onFollowChange, className = "" }) {
                             </div>
                         </div>
                     </div>
-                    <div className="absolute top-0 right-0">
-                        <FollowButton
-                            isFollowing={user.isFollowing}
-                            id={user.id}
-                        />
-                    </div>
                 </Link>
                 <div className="absolute top-0 right-0">
                     <FollowButton
                         isFollowing={user.isFollowing}
                         id={user.id}
-                        onFollowChange={onFollowChange}
+                        onFollowChange={(id, isNowFollowing) =>
+                            handleFollowChange(isNowFollowing)
+                        }
                     />
                 </div>
             </div>

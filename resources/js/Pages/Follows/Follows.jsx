@@ -12,39 +12,18 @@ export default function Friends({
     const [followers, setFollowers] = useState(initialFollowers);
     const [activeTab, setActiveTab] = useState("following");
 
-    const handleFollowChange = (userId, isNowFollowing) => {
-        const updateUser = (user) => ({
-            ...user,
-            isFollowing: isNowFollowing,
-            followersCount: user.followersCount + (isNowFollowing ? 1 : -1),
-            followingSince: isNowFollowing ? new Date().toISOString() : null,
-        });
-
-        setFollowings((prev) => {
-            const exists = prev.some((u) => u.id === userId);
-            if (isNowFollowing && !exists) {
-                const fromFollowers = followers.find((u) => u.id === userId);
-                if (fromFollowers) {
-                    return [
-                        {
-                            ...fromFollowers,
-                            isFollowing: true,
-                            followersCount:
-                                fromFollowers.followersCount +
-                                (isNowFollowing ? 1 : -1),
-                            followingSince: new Date().toISOString(),
-                        },
-                        ...prev,
-                    ];
-                }
-            } else if (!isNowFollowing) {
-                return prev.filter((u) => u.id !== userId);
-            }
-            return prev;
-        });
-
+    const handleUserChange = (changedUser) => {
+        setFollowings((prev) =>
+            prev.some((u) => u.id === changedUser.id)
+                ? prev
+                      .map((u) => (u.id === changedUser.id ? changedUser : u))
+                      .filter((u) => u.isFollowing)
+                : changedUser.isFollowing
+                ? [...prev, changedUser]
+                : prev
+        );
         setFollowers((prev) =>
-            prev.map((user) => (user.id === userId ? updateUser(user) : user))
+            prev.map((u) => (u.id === changedUser.id ? changedUser : u))
         );
     };
 
@@ -87,7 +66,7 @@ export default function Friends({
                             <UserElement
                                 key={user.id}
                                 user={user}
-                                onFollowChange={handleFollowChange}
+                                onUserChange={handleUserChange}
                             />
                         )
                     )}
