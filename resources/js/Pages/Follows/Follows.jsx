@@ -15,7 +15,7 @@ export default function Friends({
     const [activeTab, setActiveTab] = useState("following");
 
     const handleUnfollow = (unfollowedId) => {
-        setFollows((prev) => prev.filter((user) => user.id !== unfollowedId));
+        setFollowings((prev) => prev.filter((user) => user.id !== unfollowedId));
     };
     return (
         <AuthenticatedLayout

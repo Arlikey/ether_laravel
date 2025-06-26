@@ -36,6 +36,7 @@ class FollowController extends Controller
                     'username' => $user->username,
                     'profile' => $user->profile,
                     'followedBySince' => $user->pivot->created_at,
+                    'followerCount' => $user->followings()->count(),
                     'isFollowing' => $authUser->isFollowing($user->id)
                 ];
             });
