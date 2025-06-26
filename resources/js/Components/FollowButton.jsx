@@ -1,14 +1,13 @@
-import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PrimaryButton from "./PrimaryButton";
 
-export default function FollowButton({
-    isFollowing: Following,
+export function FollowButton({
+    isFollowing: initialFollowing,
     id,
-    onUnfollow = () => {},
+    onFollowChange = () => {},
 }) {
-    const [isFollowing, setFollowing] = useState(Following);
     const [loading, setLoading] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(initialFollowing);
 
     const handleFollow = async (e) => {
         e.preventDefault();
@@ -17,11 +16,12 @@ export default function FollowButton({
         try {
             if (isFollowing) {
                 await axios.patch(route("follows.unfollow", id));
-                onUnfollow();
-                setFollowing(false);
+                setIsFollowing(false);
+                onFollowChange(id, false);
             } else {
                 await axios.patch(route("follows.follow", id));
-                setFollowing(true);
+                setIsFollowing(true);
+                onFollowChange(id, true);
             }
         } catch (error) {
             console.error(error);
@@ -30,25 +30,23 @@ export default function FollowButton({
         }
     };
 
-    return isFollowing ? (
+    useEffect(() => {
+        setIsFollowing(initialFollowing);
+    }, [initialFollowing]);
+
+    return (
         <PrimaryButton
             as="button"
             onClick={handleFollow}
             disabled={loading}
             className="flex gap-1 w-32 justify-center"
         >
-            <i className="bi bi-x-circle text-base"></i>
-            <span>Unfollow</span>
-        </PrimaryButton>
-    ) : (
-        <PrimaryButton
-            as="button"
-            onClick={handleFollow}
-            disabled={loading}
-            className="flex gap-1 w-32 justify-center"
-        >
-            <i className="bi bi-plus-circle text-base"></i>
-            <span>Follow</span>
+            <i
+                className={`bi ${
+                    isFollowing ? "bi-x-circle" : "bi-plus-circle"
+                } text-base`}
+            />
+            <span>{isFollowing ? "Unfollow" : "Follow"}</span>
         </PrimaryButton>
     );
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -15,36 +16,21 @@ class FollowController extends Controller
         $followings = $authUser
             ->followings()
             ->with('profile')
-            ->get()
-            ->map(function ($user) use ($authUser) {
-                return [
-                    'id' => $user->id,
-                    'username' => $user->username,
-                    'profile' => $user->profile,
-                    'followingSince' => $user->pivot->created_at,
-                    'isFollowing' => true
-                ];
-            });
+            ->get();
 
         $followers = $authUser
             ->followers()
             ->with('profile')
-            ->get()
-            ->map(function ($user) use ($authUser) {
-                return [
-                    'id' => $user->id,
-                    'username' => $user->username,
-                    'profile' => $user->profile,
-                    'followedBySince' => $user->pivot->created_at,
-                    'followerCount' => $user->followings()->count(),
-                    'isFollowing' => $authUser->isFollowing($user->id)
-                ];
-            });
+            ->get();
+
+        $followings = UserResource::collection($followings)->resolve();
+        $followers = UserResource::collection($followers)->resolve();
 
         return Inertia::render('Follows/Follows', [
             'followings' => $followings,
             'followers' => $followers,
         ]);
+
     }
     public function follow(Request $request)
     {

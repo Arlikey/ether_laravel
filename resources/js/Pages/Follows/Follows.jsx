@@ -1,8 +1,6 @@
-import FollowButton from "@/Components/FollowButton";
-import UserAvatar from "@/Components/UserAvatar";
-import UserElement from "@/Components/UserElement";
+import { UserElement } from "@/Components/UserElement";
+import { Head, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/Layout";
-import { Head, Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function Friends({
@@ -14,9 +12,42 @@ export default function Friends({
     const [followers, setFollowers] = useState(initialFollowers);
     const [activeTab, setActiveTab] = useState("following");
 
-    const handleUnfollow = (unfollowedId) => {
-        setFollowings((prev) => prev.filter((user) => user.id !== unfollowedId));
+    const handleFollowChange = (userId, isNowFollowing) => {
+        const updateUser = (user) => ({
+            ...user,
+            isFollowing: isNowFollowing,
+            followersCount: user.followersCount + (isNowFollowing ? 1 : -1),
+            followingSince: isNowFollowing ? new Date().toISOString() : null,
+        });
+
+        setFollowings((prev) => {
+            const exists = prev.some((u) => u.id === userId);
+            if (isNowFollowing && !exists) {
+                const fromFollowers = followers.find((u) => u.id === userId);
+                if (fromFollowers) {
+                    return [
+                        {
+                            ...fromFollowers,
+                            isFollowing: true,
+                            followersCount:
+                                fromFollowers.followersCount +
+                                (isNowFollowing ? 1 : -1),
+                            followingSince: new Date().toISOString(),
+                        },
+                        ...prev,
+                    ];
+                }
+            } else if (!isNowFollowing) {
+                return prev.filter((u) => u.id !== userId);
+            }
+            return prev;
+        });
+
+        setFollowers((prev) =>
+            prev.map((user) => (user.id === userId ? updateUser(user) : user))
+        );
     };
+
     return (
         <AuthenticatedLayout
             auth={auth}
@@ -50,45 +81,16 @@ export default function Friends({
                         Followers
                     </button>
                 </div>
-                <div>
-                    {/* <div className="flex flex-1">
-                        {follows.length > 0 ? (
-                            <ul className="flex flex-col flex-1">
-                                {follows.map((user) => (
-                                    <li key={user.id}>
-                                        <UserElement
-                                            user={user}
-                                            onUnfollow={() =>
-                                                handleUnfollow(user.id)
-                                            }
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <div className="flex flex-1 flex-col justify-center items-center text-3xl gap-3 text-gray-700">
-                                <span>You following no one yet. 😔</span>
-                                <span>Go find friends!</span>
-                            </div>
-                        )}
-                    </div> */}
-                    <div className="mt-4">
-                        {activeTab === "following" &&
-                            followings.map((user) => (
-                                <UserElement
-                                    user={user}
-                                    onUnfollow={() => handleUnfollow(user.id)}
-                                />
-                            ))}
-
-                        {activeTab === "followers" &&
-                            followers.map((user) => (
-                                <UserElement
-                                    user={user}
-                                    onUnfollow={() => handleUnfollow(user.id)}
-                                />
-                            ))}
-                    </div>
+                <div className="mt-4">
+                    {(activeTab === "following" ? followings : followers).map(
+                        (user) => (
+                            <UserElement
+                                key={user.id}
+                                user={user}
+                                onFollowChange={handleFollowChange}
+                            />
+                        )
+                    )}
                 </div>
             </div>
         </AuthenticatedLayout>
