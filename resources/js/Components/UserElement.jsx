@@ -29,7 +29,7 @@ export function UserElement({
 
     return (
         <div
-            className={`min-h-[96px] transition-all duration-300 ease-in-out group hover:bg-gray-100 hover:shadow-lg rounded-lg overflow-hidden border border-gray-300 m-4 p-4 flex flex-col gap-2 ${className}`}
+            className={`min-h-[96px] transition-all duration-300 ease-in-out group hover:bg-gray-100 hover:shadow-lg rounded-lg overflow-hidden border border-gray-300 p-4 flex flex-col gap-2 ${className}`}
         >
             <div className="flex justify-between items-center relative">
                 <Link
@@ -59,7 +59,7 @@ export function UserElement({
                                 )}
                             </div>
                         </div>
-                        <div className="max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 overflow-hidden transition-all duration-300 ease-in-out px-1 text-sm text-gray-600">
+                        <div className="max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 overflow-hidden transition-all duration-300 ease-in-out text-sm text-gray-600">
                             <div className="mt-2 flex flex-col gap-1">
                                 <div className="flex gap-4">
                                     <div>

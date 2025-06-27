@@ -60,7 +60,7 @@ export default function Friends({
                         Followers
                     </button>
                 </div>
-                <div className="mt-4">
+                <div className="flex flex-col gap-4 my-6 px-8">
                     {(activeTab === "following" ? followings : followers).map(
                         (user) => (
                             <UserElement

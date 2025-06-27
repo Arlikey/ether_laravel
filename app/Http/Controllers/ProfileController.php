@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -21,9 +22,9 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         $user = User::with('profile')->where('username', '=', $request->user)->firstOrFail();
-        
+
         return Inertia::render('Profile/Profile', [
-            'user' => $user
+            'user' => UserResource::make($user)->resolve()
         ]);
     }
 
