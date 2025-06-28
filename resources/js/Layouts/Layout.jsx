@@ -3,7 +3,7 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { UserElement } from "@/Components/UserElement";
 
-export default function Authenticated({ auth, children, header }) {
+export default function AuthenticatedLayout({ auth, children, header }) {
     const [searchResults, setSearchResults] = useState(null);
 
     return (

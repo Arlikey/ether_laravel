@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\UserProfileResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -21,10 +22,10 @@ class ProfileController extends Controller
 
     public function index(Request $request)
     {
-        $user = User::with('profile')->where('username', '=', $request->user)->firstOrFail();
+        $user = User::with('user_posts.post_media')->where('username', '=', $request->user)->firstOrFail();
 
         return Inertia::render('Profile/Profile', [
-            'user' => UserResource::make($user)->resolve()
+            'user' => UserProfileResource::make($user)->resolve()
         ]);
     }
 

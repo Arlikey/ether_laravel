@@ -1,6 +1,11 @@
 import AuthenticatedLayout from "@/Layouts/Layout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import UserAvatar from "@/Components/UserAvatar";
+import PostCard from "@/Components/PostCard";
+import PrimaryButton from "@/Components/PrimaryButton";
+import Modal from "@/Components/Modal";
+import { useState } from "react";
+import { FocusTrap } from "@headlessui/react";
 
 export default function Profile({ user }) {
     const { auth } = usePage().props;
@@ -57,7 +62,25 @@ export default function Profile({ user }) {
                         </button>
                     </div>
                 </div>
-                <div className="flex flex-1 border-t border-gray-300 mx-16"></div>
+                <div className="flex flex-1 border-t border-gray-300 mx-16">
+                    <div className="flex flex-1 flex-col justify-center items-center gap-6">
+                        <div className="flex flex-col items-center gap-1">
+                            <h2 className="text-2xl">
+                                You don't have any posts yet!
+                            </h2>
+                            <p className="text-gray-700">
+                                Start creating them right now.
+                            </p>
+                        </div>
+                        <Link href={route("posts.create")}>
+                            <PrimaryButton className="gap-2">
+                                <i className="bi bi-plus-circle text-base"></i>
+                                <span className="text-base">Create post</span>
+                            </PrimaryButton>
+                        </Link>
+                        {console.log(user)}
+                    </div>
+                </div>
             </div>
         </AuthenticatedLayout>
     );

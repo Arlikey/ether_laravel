@@ -10,11 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('user_post', function (Blueprint $table) {
+        Schema::create('user_posts', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

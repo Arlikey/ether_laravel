@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Foundation\Application;
@@ -53,6 +54,8 @@ Route::middleware('auth')->group(function () {
         Route::patch('/follow/{id}', [FollowController::class, 'follow'])->name('follows.follow');
         Route::patch('/unfollow/{id}', [FollowController::class, 'unfollow'])->name('follows.unfollow');
     });
+    Route::get('/post', [PostController::class, 'create'])->name('posts.create');
+    Route::post('/post', [PostController::class, 'store'])->name('posts.store');
 });
 
 require __DIR__ . '/auth.php';

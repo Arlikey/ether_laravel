@@ -22,6 +22,22 @@
     .user-profile-header:hover {
         @apply scale-110;
     }
+
+    #toolbar {
+        @apply border-b-0 !important;
+        @apply font-sans;
+    }
+}
+
+.ql-editor::before {
+    font-style: normal !important;
+    @apply text-base;
+    font-family: inherit;
+}
+
+.ql-editor {
+    @apply text-base;
+    font-family: inherit;
 }
 
 .user-search-input {
