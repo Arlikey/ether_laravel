@@ -1,7 +1,8 @@
+import Post from "@/Components/Post";
 import AuthenticatedLayout from "@/Layouts/Layout";
 import { Head, usePage } from "@inertiajs/react";
 
-export default function Home() {
+export default function Home({ posts }) {
     const { auth } = usePage().props;
     return (
         <AuthenticatedLayout
@@ -13,8 +14,15 @@ export default function Home() {
         >
             <Head title="Home" />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8"></div>
+            <div className="flex flex-1 flex-col items-center">
+                {posts ? (
+                    posts.map((post) => (
+                        <Post post={post} children={post.description} />
+                    ))
+                ) : (
+                    <div>No posts here yet.</div>
+                )}
+                {console.log(posts)}
             </div>
         </AuthenticatedLayout>
     );

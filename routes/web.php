@@ -26,14 +26,9 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        'posts' => auth()->user()?->user_posts()->with('post_media')->get()
     ]);
 })->name('/');
-
-// Route::get('/friends', function () {
-//     return Inertia::render('Friends/Friends', [
-//         'friends' => auth()->user()->followings()->with('profile')->get()
-//     ]);
-// })->middleware(['auth', 'verified'])->name('friends');
 
 Route::get('/api/search-users', [ApiController::class, 'liveSearch']);
 
@@ -46,7 +41,6 @@ Route::get('/my-profile', function () {
 })->name('profile.self');
 
 Route::middleware('auth')->group(function () {
-    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::prefix('follows')->group(function () {

@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@plugin "@tailwindcss/typography";
 
 @layer components {
     .btn-outline {
@@ -46,4 +47,57 @@
 
 .user-search-icon {
     transform: translateY(-50%);
+}
+
+.prose h2,
+.ql-editor h2,
+.prose h3,
+.ql-editor h3,
+.prose p,
+.ql-editor p,
+.prose blockquote,
+.ql-editor blockquote,
+.prose ul,
+.ql-editor ul,
+.prose ol,
+.ql-editor ol,
+.prose pre,
+.ql-editor pre .prose table,
+.ql-editor table .prose figure,
+.ql-editor figure {
+    margin-top: 0.25em !important;
+    margin-bottom: 0.25em !important;
+}
+
+.prose li,
+.ql-editor li {
+    margin-top: 0.125em !important;
+    margin-bottom: 0.125em !important;
+}
+
+.prose thead th,
+.ql-editor thead th .prose tbody td,
+.ql-editor tbody td {
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+}
+
+.prose blockquote p,
+.ql-editor blockquote p {
+    margin: 0 !important;
+}
+
+.prose img,
+.ql-editor img {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+}
+
+.prose figure > * {
+    margin: 0;
+}
+
+.prose p:empty,
+.ql-editor p:empty {
+    margin: 0;
 }

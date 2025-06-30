@@ -37,8 +37,9 @@ class PostController extends Controller
             'media.*' => 'file|mimes:jpg,jpeg,png,mp4|max:20480',
         ]);
 
+
         if (!$request->title && !$request->description && !$request->hasFile('media')) {
-            return back()->withErrors(['title' => 'Post must contain at least title, description or media.']);
+            return back()->withErrors(['content' => 'Post must contain at least title, description or media.']);
         }
 
         $user = auth()->user();
@@ -55,6 +56,8 @@ class PostController extends Controller
 
                 $mime = $file->getMimeType();
                 $type = str_starts_with($mime, 'video') ? 'video' : 'image';
+
+                
 
                 $post->post_media()->create([
                     'url' => $path,

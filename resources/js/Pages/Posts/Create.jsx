@@ -1,11 +1,11 @@
 import InputError from "@/Components/InputError";
-import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/Layout";
-import { Head, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useRef, useState } from "react";
+import Dropzone from "react-dropzone";
 
 export default function PostCreate() {
     const { auth } = usePage().props;
@@ -14,26 +14,7 @@ export default function PostCreate() {
         description: "",
         media: [],
     });
-
     const [loading, setLoading] = useState(false);
-    // const toolbarOptions = [
-    //     ["bold", "italic", "underline", "strike"],
-    //     ["blockquote", "code-block"],
-    //     ["link", "formula"],
-
-    //     [{ header: 1 }, { header: 2 }],
-    //     [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-    //     [{ script: "sub" }, { script: "super" }],
-    //     [{ indent: "-1" }, { indent: "+1" }],
-    //     [{ direction: "rtl" }],
-
-    //     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-    //     [{ color: [] }, { background: [] }],
-    //     [{ align: [] }],
-
-    //     ["clean"],
-    // ];
 
     const submit = (e) => {
         e.preventDefault();
@@ -63,6 +44,7 @@ export default function PostCreate() {
             >
                 <div className="border-b border-gray-300 p-4">
                     <h2 className="text-3xl text-gray-700">Create Post</h2>
+                    <InputError message={errors.content} className="mt-2" />
                 </div>
                 <div className="flex flex-1">
                     <div className="flex flex-1 basis-2/12 justify-start flex-col border-r border-gray-300 py-4">
@@ -96,21 +78,49 @@ export default function PostCreate() {
                             />
                         </div>
                     </div>
-                    <div className="flex flex-1 p-6">
-                        <input
-                            type="file"
-                            multiple
-                            accept="image/*,video/*"
-                            onChange={(e) => setData("media", e.target.files)}
-                        />
+                    <div className="flex flex-1 p-6 flex-col">
+                        <div className="flex flex-col flex-1">
+                            {data.media.length > 0 && (
+                                <ul className="text-sm text-gray-700">
+                                    {data.media.map((file, index) => (
+                                        <li key={index}>{file.name}</li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                        <Dropzone
+                            onDrop={(acceptedFiles) =>
+                                setData("media", [
+                                    ...data.media,
+                                    ...acceptedFiles,
+                                ])
+                            }
+                        >
+                            {({ getRootProps, getInputProps }) => (
+                                <section className="flex flex-1">
+                                    <div
+                                        {...getRootProps()}
+                                        className="flex flex-1 items-center justify-center border border-dashed border-gray-300 rounded-md cursor-pointer"
+                                    >
+                                        <input {...getInputProps()} />
+                                        <div className="flex flex-col text-lg items-center text-gray-700">
+                                            <i className="bi bi-cloud-arrow-up text-6xl"></i>
+                                            Drag and drop, or click to upload
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
+                        </Dropzone>
                         <InputError message={errors.media} />
                     </div>
                 </div>
                 <div className="flex justify-end border-t border-gray-300 p-4 gap-x-4">
-                    <SecondaryButton>
-                        <span className="text-base">Cancel</span>
-                    </SecondaryButton>
-                    <PrimaryButton disabled={loading || processing}>
+                    <Link href={route("profile.index", auth.user.username)}>
+                        <SecondaryButton>
+                            <span className="text-base">Cancel</span>
+                        </SecondaryButton>
+                    </Link>
+                    <PrimaryButton disabled={loading}>
                         <span className="text-base">Publish</span>
                     </PrimaryButton>
                 </div>
@@ -132,7 +142,6 @@ function Toolbar({ setData }) {
                     },
                     theme: "snow",
                     placeholder: "Start writing your post here...",
-                    
                 });
 
                 quillRef.current.on("text-change", () => {
@@ -168,7 +177,7 @@ function Toolbar({ setData }) {
             <div
                 id="editor"
                 ref={editorRef}
-                className="w-full not-italic bg-white border border-t-0 border-gray-300 rounded-b-md"
+                className="bg-white border border-t-0 border-gray-300 rounded-b-md"
             ></div>
         </div>
     );
