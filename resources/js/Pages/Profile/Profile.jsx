@@ -48,7 +48,7 @@ export default function Profile({ user }) {
                             </span>
                             <span className="text-gray-700">
                                 <strong>
-                                    {user.followingCount} followings
+                                    {user.followingCount} following
                                 </strong>
                             </span>
                         </div>

@@ -14,7 +14,7 @@ export default function Home({ posts }) {
         >
             <Head title="Home" />
 
-            <div className="flex flex-1 flex-col items-center">
+            <div className="flex flex-1 flex-col items-center mt-4">
                 {posts ? (
                     posts.map((post) => (
                         <Post post={post} children={post.description} />

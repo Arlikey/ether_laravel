@@ -26,7 +26,7 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
-        'posts' => auth()->user()?->user_posts()->with('post_media')->get()
+        'posts' => auth()->user()?->user_posts()->with(['post_media', 'user'])->get()
     ]);
 })->name('/');
 

@@ -101,3 +101,7 @@
 .ql-editor p:empty {
     margin: 0;
 }
+
+.post-images {
+    grid-template-columns: 70% 1fr;
+}

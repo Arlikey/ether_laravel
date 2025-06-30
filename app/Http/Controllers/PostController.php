@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\PostMedia;
 use App\Models\UserPost;
+use File;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Intervention\Image\Laravel\Facades\Image;
 use Redirect;
+use Str;
 
 class PostController extends Controller
 {
@@ -52,15 +55,27 @@ class PostController extends Controller
 
         if ($request->hasFile('media')) {
             foreach ($request->file('media') as $index => $file) {
-                $path = $file->store('posts/media', options: 'public');
-
                 $mime = $file->getMimeType();
                 $type = str_starts_with($mime, 'video') ? 'video' : 'image';
 
-                
+                $extension = $file->getClientOriginalExtension();
+                $filename = Str::uuid() . '.' . $extension;
+
+                $originalPath = $file->storeAs('posts/media/originals', $filename, 'public');
+
+                if ($type === 'image') {
+                    File::ensureDirectoryExists(storage_path('app/public/posts/media/medium'));
+                    File::ensureDirectoryExists(storage_path('app/public/posts/media/thumbs'));
+
+                    $mediumPath = storage_path("app/public/posts/media/medium/{$filename}");
+                    Image::read($file)->cover(640, 960)->save($mediumPath);
+
+                    $thumbPath = storage_path("app/public/posts/media/thumbs/{$filename}");
+                    Image::read($file)->cover(320, 480)->save($thumbPath);
+                }
 
                 $post->post_media()->create([
-                    'url' => $path,
+                    'url' => $filename,
                     'type' => $type,
                     'order' => $index,
                 ]);

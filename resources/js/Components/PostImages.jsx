@@ -1,7 +1,10 @@
 export default function PostImages({ images }) {
     if (images.length === 1) {
         return (
-            <img src={`storage/${images[0].url}`} className="w-full rounded" />
+            <img
+                src={`storage/posts/media/medium/${images[0].url}`}
+                className="w-full rounded object-cover max-h-[700px]"
+            />
         );
     }
 
@@ -20,11 +23,13 @@ export default function PostImages({ images }) {
             : "row-span-3";
 
     return (
-        <div className={`grid grid-cols-2 ${rows} gap-2 max-h-[400px]`}>
+        <div
+            className={`post-images grid grid-cols-2 ${rows} gap-1 h-[600px] w-full`}
+        >
             <div className={`col-span-1 ${rowspan}`}>
                 <img
-                    src={`storage/${images[0].url}`}
-                    className="w-full h-full object-cover rounded"
+                    src={`storage/posts/media/medium/${images[0].url}`}
+                    className="w-full h-full object-cover rounded-md"
                     loading="lazy"
                 />
             </div>
@@ -32,8 +37,8 @@ export default function PostImages({ images }) {
             {images.slice(1, 4).map((img, index) => (
                 <div key={index} className="relative">
                     <img
-                        src={`storage/${img.url}`}
-                        className="w-full h-full object-cover rounded"
+                        src={`storage/posts/media/thumbs/${img.url}`}
+                        className="w-full h-full object-cover rounded-md"
                         loading="lazy"
                     />
                     {index === 2 && images.length > 4 && (
