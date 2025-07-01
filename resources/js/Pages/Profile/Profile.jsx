@@ -4,11 +4,19 @@ import UserAvatar from "@/Components/UserAvatar";
 import PostCard from "@/Components/PostCard";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Modal from "@/Components/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FocusTrap } from "@headlessui/react";
+import { toast } from "react-toastify";
 
 export default function Profile({ user }) {
-    const { auth } = usePage().props;
+    const { auth, flash } = usePage().props;
+
+    useEffect(() => {
+        if (flash.status) {
+            toast.success(flash.status);
+        }
+    }, [flash.status]);
+
     return (
         <AuthenticatedLayout
             auth={auth}
@@ -23,7 +31,7 @@ export default function Profile({ user }) {
             }}
         >
             <Head title="Profile" />
-
+            {console.log(usePage().props.flash)}
             <div className="flex flex-col flex-1">
                 <div className="p-20 flex justify-between max-h-[352px]">
                     <div className="mr-8">
@@ -47,9 +55,7 @@ export default function Profile({ user }) {
                                 <strong>{user.followersCount} followers</strong>
                             </span>
                             <span className="text-gray-700">
-                                <strong>
-                                    {user.followingCount} following
-                                </strong>
+                                <strong>{user.followingCount} following</strong>
                             </span>
                         </div>
                         <div>
@@ -90,7 +96,6 @@ export default function Profile({ user }) {
                                 </h1>
                             </>
                         )}
-                        {console.log(user)}
                     </div>
                 </div>
             </div>

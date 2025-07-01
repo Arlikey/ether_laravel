@@ -22,4 +22,15 @@ class UserPost extends Model
     {
         return $this->hasMany(PostMedia::class, 'post_id');
     }
+
+    public function likes()
+    {
+        return $this->hasMany(PostLike::class, 'post_id');
+    }
+
+    public function isLikedBy($user)
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
 }
+

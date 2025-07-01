@@ -1,17 +1,34 @@
 import "quill/dist/quill.snow.css";
 import PostImages from "./PostImages";
 import UserAvatar from "./UserAvatar";
+import LikeButton from "./LikeButton";
+import { useState } from "react";
 
-export default function Post({ post }) {
+export default function Post({ post: initialPost }) {
+    const [post, setPost] = useState(initialPost);
+    const handleLikeChange = async (isLiked) => {
+        const updatedPost = {
+            ...post,
+            isLikedBy: isLiked,
+            likesCount: post.likesCount + (isLiked ? 1 : -1),
+        };
+        setPost(updatedPost);
+    };
     return (
         <div className="w-[680px] flex flex-col items-start gap-4 rounded-2xl shadow-md bg-white p-6 mb-6">
             <div className="flex justify-between items-center w-full">
                 <div className="flex gap-3 items-center">
-                    <UserAvatar size={36} />
+                    <UserAvatar
+                        size={36}
+                        avatar={post.user?.profile.avatar}
+                        alt={post.user?.username}
+                    />
                     <span className="font-bold">{post.user?.username}</span>
                 </div>
                 <div>
-                    <span className="text-gray-600">25-02-2025</span>
+                    <span className="text-gray-600">
+                        {new Date(post.created_at).toDateString()}
+                    </span>
                 </div>
             </div>
             <div className="flex flex-col w-full gap-4">
@@ -20,14 +37,14 @@ export default function Post({ post }) {
                 ) : (
                     ""
                 )}
-                {post.post_media.length > 0 ? (
-                    <PostImages images={post.post_media} />
+                {post.media.length > 0 ? (
+                    <PostImages images={post.media} />
                 ) : (
                     ""
                 )}
                 {post.description ? (
                     <div
-                        className="prose prose-neutral w-full pl-2 "
+                        className="ql-editor prose prose-neutral w-full pl-2 "
                         dangerouslySetInnerHTML={{ __html: post.description }}
                     />
                 ) : (
@@ -37,23 +54,31 @@ export default function Post({ post }) {
             <div className="w-full flex items-center justify-between text-gray-600">
                 <div className="flex gap-6">
                     <div className="flex gap-2 items-center">
-                        <span className="text-xl">13</span>
-                        <i class="bi bi-heart text-xl"></i>
+                        <span className="text-xl tabular-nums">
+                            {post.likesCount}
+                        </span>
+                        <LikeButton
+                            post={post}
+                            isLiked={post.isLikedBy}
+                            onLikeChange={(isLikedBy) =>
+                                handleLikeChange(isLikedBy)
+                            }
+                        />
                     </div>
                     <div className="flex gap-2 items-center">
-                        <span className="text-xl">0</span>
-                        <i class="bi bi-chat-dots text-xl"></i>
+                        <span className="text-xl tabular-nums">0</span>
+                        <i className="bi bi-chat-dots text-xl"></i>
                     </div>
                     <div className="flex items-center">
-                        <i class="bi bi-bookmark text-xl"></i>
+                        <i className="bi bi-bookmark text-xl"></i>
                     </div>
                 </div>
                 <div className="flex gap-6">
                     <div className="flex items-center">
-                        <i class="bi bi-link-45deg text-xl"></i>
+                        <i className="bi bi-link-45deg text-xl"></i>
                     </div>
                     <div className="flex items-center">
-                        <i class="bi bi-flag text-xl"></i>
+                        <i className="bi bi-flag text-xl"></i>
                     </div>
                 </div>
             </div>

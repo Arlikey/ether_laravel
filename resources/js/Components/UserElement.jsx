@@ -81,7 +81,7 @@ export function UserElement({
                     <FollowButton
                         isFollowing={user.isFollowing}
                         id={user.id}
-                        onFollowChange={(id, isNowFollowing) =>
+                        onFollowChange={(isNowFollowing) =>
                             handleFollowChange(isNowFollowing)
                         }
                     />

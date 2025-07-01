@@ -6,6 +6,7 @@ import AuthenticatedLayout from "@/Layouts/Layout";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useRef, useState } from "react";
 import Dropzone from "react-dropzone";
+import { toast } from "react-toastify";
 
 export default function PostCreate() {
     const { auth } = usePage().props;
@@ -20,7 +21,12 @@ export default function PostCreate() {
         e.preventDefault();
         setLoading(true);
         post(route("posts.store"), {
-            onFinish: () => setLoading(false),
+            onError: (errors) => {
+                toast.error(errors.message || "Something went wrong.");
+            },
+            onFinish: () => {
+                setLoading(false);
+            },
         });
     };
 
@@ -167,6 +173,9 @@ function Toolbar({ setData }) {
                         <option value="3"></option>
                         <option selected></option>
                     </select>
+                </span>
+                <span className="ql-formats">
+                    <button className="ql-code-block" />
                 </span>
                 <span className="ql-formats">
                     <button className="ql-list" value="ordered" />

@@ -1,9 +1,27 @@
 import Post from "@/Components/Post";
 import AuthenticatedLayout from "@/Layouts/Layout";
 import { Head, usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 
-export default function Home({ posts }) {
+export default function Home() {
     const { auth } = usePage().props;
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const handlePosts = async () => {
+        try {
+            const response = await axios.get(route("posts.index"));
+            setPosts(response.data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        handlePosts();
+    }, []);
     return (
         <AuthenticatedLayout
             auth={auth}
@@ -14,15 +32,14 @@ export default function Home({ posts }) {
         >
             <Head title="Home" />
 
-            <div className="flex flex-1 flex-col items-center mt-4">
-                {posts ? (
+            <div className="flex flex-1 flex-col overflow-y-auto pt-4 items-center">
+                {posts.length > 0 ? (
                     posts.map((post) => (
                         <Post post={post} children={post.description} />
                     ))
                 ) : (
                     <div>No posts here yet.</div>
                 )}
-                {console.log(posts)}
             </div>
         </AuthenticatedLayout>
     );

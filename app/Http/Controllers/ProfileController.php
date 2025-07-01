@@ -22,7 +22,11 @@ class ProfileController extends Controller
 
     public function index(Request $request)
     {
-        $user = User::with('user_posts.post_media')->where('username', '=', $request->user)->firstOrFail();
+        $user = User::query()
+            ->with(['user_posts.post_media', 'user_posts.user'])
+            ->withCount(['followers', 'followings'])
+            ->where('username', '=', $request->user)
+            ->firstOrFail();
 
         return Inertia::render('Profile/Profile', [
             'user' => UserProfileResource::make($user)->resolve()

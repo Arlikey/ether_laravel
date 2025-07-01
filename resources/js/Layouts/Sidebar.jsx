@@ -6,7 +6,7 @@ export default function Sidebar({ user }) {
     return (
         <div className="w-20 flex flex-col py-4">
             <NavLink
-                href={route("/")}
+                href={route("home")}
                 className="flex flex-col px-4 py-2 pt-3 gap-1"
                 active={component === "Home"}
             >

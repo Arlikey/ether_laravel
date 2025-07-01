@@ -15,6 +15,18 @@ export default {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
+            keyframes: {
+                heartbeat: {
+                    "0%": { transform: "scale(1)" },
+                    "14%": { transform: "scale(1.3)" },
+                    "28%": { transform: "scale(1)" },
+                    "42%": { transform: "scale(1.25)" },
+                    "70%": { transform: "scale(1)" },
+                },
+            },
+            animation: {
+                heartbeat: "heartbeat 2s ease-in-out infinite",
+            },
         },
     },
 

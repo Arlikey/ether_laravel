@@ -21,8 +21,8 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'profile' => $this->profile,
             'isFollowing' => $authUser ? $authUser->isFollowing($this->id) : false,
-            'followersCount' => $this->followers()->count(),
-            'followingCount' => $this->followings()->count(),
+            'followersCount' => $this->followers_count,
+            'followingCount' => $this->followings_count,
             'followingSince' => $authUser && $authUser->isFollowing($this->id)
                 ? optional($authUser->followings()->where('followed_id', $this->id)->first())->pivot->created_at
                 : null,

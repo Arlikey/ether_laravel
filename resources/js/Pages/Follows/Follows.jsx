@@ -64,6 +64,7 @@ export default function Friends({
                     {(activeTab === "following" ? followings : followers).map(
                         (user) => (
                             <>
+                                {console.log(user)}
                                 <UserElement
                                     key={user.id}
                                     user={user}

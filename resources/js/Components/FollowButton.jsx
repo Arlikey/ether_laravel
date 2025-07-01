@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PrimaryButton from "./PrimaryButton";
+import { toast } from "react-toastify";
 
 export function FollowButton({
     isFollowing: initialFollowing,
@@ -17,14 +18,15 @@ export function FollowButton({
             if (isFollowing) {
                 await axios.patch(route("follows.unfollow", id));
                 setIsFollowing(false);
-                onFollowChange(id, false);
+                onFollowChange(false);
             } else {
                 await axios.patch(route("follows.follow", id));
                 setIsFollowing(true);
-                onFollowChange(id, true);
+                onFollowChange(true);
             }
         } catch (error) {
             console.error(error);
+            toast.error("Oops! You need to log in first.");
         } finally {
             setLoading(false);
         }

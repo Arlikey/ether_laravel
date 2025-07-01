@@ -18,8 +18,11 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
+            'user' => $this->user,
             'created_at' => $this->created_at?->toDateTimeString(),
-            'media' => MediaResource::collection($this->whenLoaded('post_media'))->resolve(),
+            'likesCount' => $this->likes_count,
+            'isLikedBy' => (bool) $this->is_liked_by,
+            'media' => MediaResource::collection($this->post_media)->resolve(),
         ];
     }
 }

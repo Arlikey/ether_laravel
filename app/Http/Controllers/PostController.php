@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PostMedia;
 use App\Models\UserPost;
+use Exception;
 use File;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -42,7 +43,7 @@ class PostController extends Controller
 
 
         if (!$request->title && !$request->description && !$request->hasFile('media')) {
-            return back()->withErrors(['content' => 'Post must contain at least title, description or media.']);
+            return back()->withErrors(['message' => 'You must provide a title, description, or media.']);
         }
 
         $user = auth()->user();

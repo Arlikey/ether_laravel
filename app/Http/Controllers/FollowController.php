@@ -16,11 +16,13 @@ class FollowController extends Controller
         $followings = $authUser
             ->followings()
             ->with('profile')
+            ->withCount(['followings', 'followers'])
             ->get();
 
         $followers = $authUser
             ->followers()
             ->with('profile')
+            ->withCount(['followings', 'followers'])
             ->get();
 
         $followings = UserResource::collection($followings)->resolve();

@@ -6,7 +6,7 @@ export default function UserAvatar({ avatar, alt, size = 32 }) {
 
     return avatar ? (
         <img
-            src={`/storage/images/${avatar}`}
+            src={`/storage/avatars/${avatar}`}
             alt={alt}
             className={`rounded-full object-cover border border-gray-300`}
             style={WIDTH_HEIGHT}

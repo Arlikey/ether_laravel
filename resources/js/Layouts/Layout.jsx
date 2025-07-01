@@ -2,12 +2,14 @@ import { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { UserElement } from "@/Components/UserElement";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function AuthenticatedLayout({ auth, children, header }) {
     const [searchResults, setSearchResults] = useState(null);
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col">
+        <div className="h-screen bg-gray-100 flex flex-col">
+            <ToastContainer position="bottom-right" />
             <Header
                 user={auth?.user}
                 header={header}
@@ -16,7 +18,7 @@ export default function AuthenticatedLayout({ auth, children, header }) {
             <div className="body flex flex-1">
                 <Sidebar user={auth?.user} />
 
-                <main className="flex flex-1 rounded-tl-xl border border-gray-300 overflow-y-auto max-h-[calc(100vh-4rem)]">
+                <main className="flex flex-1 rounded-tl-xl border border-gray-300 max-h-[calc(100vh-4rem)]">
                     {searchResults === null ? (
                         children
                     ) : (
