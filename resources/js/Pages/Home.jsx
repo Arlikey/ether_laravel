@@ -35,7 +35,11 @@ export default function Home() {
             <div className="flex flex-1 flex-col overflow-y-auto pt-4 items-center">
                 {posts.length > 0 ? (
                     posts.map((post) => (
-                        <Post post={post} children={post.description} />
+                        <Post
+                            key={post.id}
+                            post={post}
+                            children={post.description}
+                        />
                     ))
                 ) : (
                     <div>No posts here yet.</div>

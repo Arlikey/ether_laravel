@@ -43,6 +43,7 @@ export default function PostCreate() {
                 href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
                 rel="stylesheet"
             />
+
             <form
                 onSubmit={submit}
                 encType="multipart/form-data"
@@ -131,7 +132,6 @@ export default function PostCreate() {
                     </PrimaryButton>
                 </div>
             </form>
-            <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
         </AuthenticatedLayout>
     );
 }
@@ -162,24 +162,35 @@ function Toolbar({ setData }) {
                 id="toolbar"
                 className="rounded-t-md p-3 bg-white shadow flex flex-wrap gap-x-2"
             >
-                <span className="ql-formats space-x-2">
+                <span className="ql-formats">
                     <button className="ql-bold" />
                     <button className="ql-italic" />
                     <button className="ql-underline" />
                 </span>
                 <span className="ql-formats">
-                    <select className="ql-header">
+                    <select className="ql-color" />
+                </span>
+                <span className="ql-formats">
+                    <select className="ql-header" defaultValue={0}>
                         <option value="2"></option>
                         <option value="3"></option>
-                        <option selected></option>
+                        <option value="0"></option>
                     </select>
                 </span>
                 <span className="ql-formats">
+                    <button className="ql-script" value="super" />
+                    <button className="ql-script" value="sub" />
+                </span>
+                <span className="ql-formats">
+                    <button className="ql-blockquote" />
                     <button className="ql-code-block" />
                 </span>
                 <span className="ql-formats">
                     <button className="ql-list" value="ordered" />
                     <button className="ql-list" value="bullet" />
+                </span>
+                <span className="ql-formats">
+                    <button className="ql-clean" />
                 </span>
             </div>
 

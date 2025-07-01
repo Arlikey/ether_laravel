@@ -32,5 +32,10 @@ class UserPost extends Model
     {
         return $this->likes()->where('user_id', $user->id)->exists();
     }
+
+    public function savedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'post_savings')->withTimestamps();
+    }
 }
 

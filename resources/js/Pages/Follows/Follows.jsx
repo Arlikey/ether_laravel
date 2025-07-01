@@ -63,14 +63,11 @@ export default function Friends({
                 <div className="flex flex-col gap-4 my-6 px-8">
                     {(activeTab === "following" ? followings : followers).map(
                         (user) => (
-                            <>
-                                {console.log(user)}
-                                <UserElement
-                                    key={user.id}
-                                    user={user}
-                                    onUserChange={handleUserChange}
-                                />
-                            </>
+                            <UserElement
+                                key={user.id}
+                                user={user}
+                                onUserChange={handleUserChange}
+                            />
                         )
                     )}
                 </div>

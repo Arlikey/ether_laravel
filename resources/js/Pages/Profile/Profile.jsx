@@ -7,9 +7,21 @@ import Modal from "@/Components/Modal";
 import { useEffect, useState } from "react";
 import { FocusTrap } from "@headlessui/react";
 import { toast } from "react-toastify";
+import { FollowButton } from "@/Components/FollowButton";
 
-export default function Profile({ user }) {
+export default function Profile({ user: initialUser }) {
     const { auth, flash } = usePage().props;
+    const [user, setUser] = useState(initialUser);
+    const [edit, setEdit] = useState(false);
+
+    const handleFollowChange = async (isNowFollowing) => {
+        const updatedUser = {
+            ...user,
+            isFollowing: isNowFollowing,
+            followersCount: user.followersCount + (isNowFollowing ? 1 : -1),
+        };
+        setUser(updatedUser);
+    };
 
     useEffect(() => {
         if (flash.status) {
@@ -31,7 +43,6 @@ export default function Profile({ user }) {
             }}
         >
             <Head title="Profile" />
-            {console.log(usePage().props.flash)}
             <div className="flex flex-col flex-1">
                 <div className="p-20 flex justify-between max-h-[352px]">
                     <div className="mr-8">
@@ -62,11 +73,26 @@ export default function Profile({ user }) {
                             <p>{user.profile.bio}</p>
                         </div>
                     </div>
-                    <div className="text-2xl text-purple-600">
-                        <button className="flex">
-                            <i className="bi bi-pencil"></i>
-                        </button>
-                    </div>
+                    {auth.user.id === user.id ? (
+                        <div className="text-2xl text-purple-600">
+                            <button
+                                className="flex"
+                                onClick={() => setEdit(!edit)}
+                            >
+                                <i className="bi bi-pencil"></i>
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="flex justify-center items-center  mr-12">
+                            <FollowButton
+                                isFollowing={user.isFollowing}
+                                id={user.id}
+                                onFollowChange={(isNowFollowing) =>
+                                    handleFollowChange(isNowFollowing)
+                                }
+                            />
+                        </div>
+                    )}
                 </div>
                 <div className="flex flex-1 border-t border-gray-300 mx-16">
                     <div className="flex flex-1 flex-col justify-center items-center gap-6">

@@ -17,6 +17,7 @@ class ApiController extends Controller
         $users = User::where('username', 'like', "%{$request->q}%")
             ->when($authUser, fn($q) => $q->where('id', '!=', $authUser->id))
             ->with('profile')
+            ->withCount(['followings', 'followers'])
             ->get();
 
         return UserResource::collection($users)->resolve();

@@ -15,7 +15,9 @@ export default function Post({ post: initialPost }) {
         setPost(updatedPost);
     };
     return (
-        <div className="w-[680px] flex flex-col items-start gap-4 rounded-2xl shadow-md bg-white p-6 mb-6">
+        <div
+            className="w-[680px] flex flex-col items-start gap-4 rounded-2xl shadow-md bg-white p-6 mb-6"
+        >
             <div className="flex justify-between items-center w-full">
                 <div className="flex gap-3 items-center">
                     <UserAvatar
