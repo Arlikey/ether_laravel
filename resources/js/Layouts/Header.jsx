@@ -28,7 +28,7 @@ export default function Header({ user, header, onResults }) {
 
                         <Dropdown.Content>
                             <Dropdown.Link
-                                href={route("profile.index", user.username)}
+                                href={route("profile.index", user.slug)}
                             >
                                 Profile
                             </Dropdown.Link>

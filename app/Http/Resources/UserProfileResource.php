@@ -19,11 +19,13 @@ class UserProfileResource extends JsonResource
         return [
             'id' => $this->id,
             'username' => $this->username,
+            'slug' => $this->slug,
             'profile' => $this->profile,
-            'posts' => PostResource::collection($this->user_posts)->resolve(),
+            'posts' => PostPreviewResource::collection($this->whenLoaded('user_posts'))->resolve(),
             'isFollowing' => $authUser ? $authUser->isFollowing($this->id) : false,
-            'followersCount' => $this->followers()->count(),
-            'followingCount' => $this->followings()->count(),
+            'followersCount' => $this->followers_count,
+            'followingCount' => $this->followings_count,
+            'postsCount' => $this->user_posts_count,
             'followingSince' => $authUser && $authUser->isFollowing($this->id)
                 ? optional($authUser->followings()->where('followed_id', $this->id)->first())->pivot->created_at
                 : null,

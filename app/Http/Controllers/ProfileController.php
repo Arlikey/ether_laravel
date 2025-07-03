@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Log;
 
 class ProfileController extends Controller
 {
@@ -22,10 +23,24 @@ class ProfileController extends Controller
 
     public function index(Request $request)
     {
+        $authUser = auth()->user();
+
         $user = User::query()
-            ->with(['user_posts.post_media', 'user_posts.user'])
-            ->withCount(['followers', 'followings'])
-            ->where('username', '=', $request->user)
+            ->with(['user_posts.user'])
+            ->with([
+                'user_posts' => function ($query) use ($authUser) {
+                    $query->with(['post_media'])
+                        ->withCount('likes')
+                        ->when(
+                            $authUser,
+                            fn($q) =>
+                            $q->withExists(['likes as is_liked_by' => fn($q2) => $q2->where('user_id', $authUser->id)])
+                        )
+                        ->orderBy('created_at', 'desc');
+                }
+            ])
+            ->withCount(['followers', 'followings', 'user_posts'])
+            ->where('slug', '=', $request->slug)
             ->firstOrFail();
 
         return Inertia::render('Profile/Profile', [
@@ -47,17 +62,28 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        Log::info('Profile update data', $request->all());
+        $data = $request->validate([
+            'fullname' => 'nullable|string|max:32',
+            'bio' => 'nullable|string|max:64',
+            'avatar' => 'nullable|image|max:2048',
+        ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+
+        $user = auth()->user();
+        $user->profile->update($data);
+
+        if ($request->hasFile('avatar')) {
+            $user->profile->update([
+                'avatar' => $request->file('avatar')->store('avatars', 'public'),
+            ]);
         }
 
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
+        return response()->json([
+            'profile' => $user->profile,
+        ]);
     }
 
     /**

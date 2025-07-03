@@ -107,3 +107,15 @@
 .post-images {
     grid-template-columns: 70% 1fr;
 }
+
+.post-preview-text-white {
+    text-shadow: 0 0 1px #000000cc, 0 0 8px #ffffff33;
+}
+
+.post-preview-text-black {
+    text-shadow: 0 0 2px #ffffffcc;
+}
+
+.post-preview-no-media {
+    @apply py-12 !important;
+}

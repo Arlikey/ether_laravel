@@ -37,12 +37,12 @@ Route::get('/api/posts', [ApiController::class, 'getPosts'])->name('posts.index'
 
 Route::get('/api/search-users', [ApiController::class, 'liveSearch']);
 
-Route::get('/profile/{user}', [ProfileController::class, 'index'])->name('profile.index');
+Route::get('/profile/{slug}', [ProfileController::class, 'index'])->name('profile.index');
 Route::get('/my-profile', function () {
     if (!auth()->check()) {
         return redirect()->route('login');
     }
-    return redirect()->route('profile.index', auth()->user()->username);
+    return redirect()->route('profile.index', auth()->user()->slug);
 })->name('profile.self');
 
 Route::middleware('auth')->group(function () {

@@ -26,7 +26,7 @@ export default function Sidebar({ user }) {
                 className="flex flex-col px-4 py-2 pt-3 gap-1"
                 active={
                     route().current("profile.index") &&
-                    route().params.user === user?.username
+                    route().params.slug === user?.slug
                 }
             >
                 <i className="bi bi-person text-xl"></i>

@@ -22,7 +22,7 @@ export default function Post({ post: initialPost }) {
                 <div className="flex gap-3 items-center">
                     <UserAvatar
                         size={36}
-                        avatar={post.user?.profile.avatar}
+                        avatar={post.user?.profile?.avatar}
                         alt={post.user?.username}
                     />
                     <span className="font-bold">{post.user?.username}</span>

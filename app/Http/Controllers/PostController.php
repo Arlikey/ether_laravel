@@ -83,7 +83,7 @@ class PostController extends Controller
             }
         }
 
-        return Redirect::route('profile.index', $user->username)
+        return Redirect::route('profile.index', $user->slug)
             ->with('status', 'Post created successfully!');
     }
 

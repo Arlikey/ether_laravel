@@ -1,4 +1,4 @@
-export default function UserAvatar({ avatar, alt, size = 32 }) {
+export default function UserAvatar({ avatar, alt, isBlob, size = 32 }) {
     const WIDTH_HEIGHT = {
         width: `${size}px`,
         height: `${size}px`,
@@ -6,7 +6,7 @@ export default function UserAvatar({ avatar, alt, size = 32 }) {
 
     return avatar ? (
         <img
-            src={`/storage/avatars/${avatar}`}
+            src={(isBlob ? "" : "/storage/") + avatar}
             alt={alt}
             className={`rounded-full object-cover border border-gray-300`}
             style={WIDTH_HEIGHT}
