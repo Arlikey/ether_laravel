@@ -26,22 +26,28 @@ class ProfileController extends Controller
         $authUser = auth()->user();
 
         $user = User::query()
-            ->with(['user_posts.user'])
-            ->with([
-                'user_posts' => function ($query) use ($authUser) {
-                    $query->with(['post_media'])
-                        ->withCount('likes')
-                        ->when(
-                            $authUser,
-                            fn($q) =>
-                            $q->withExists(['likes as is_liked_by' => fn($q2) => $q2->where('user_id', $authUser->id)])
-                        )
-                        ->orderBy('created_at', 'desc');
-                }
-            ])
             ->withCount(['followers', 'followings', 'user_posts'])
             ->where('slug', '=', $request->slug)
             ->firstOrFail();
+
+        $withLikesAndSaved = function ($query) use ($authUser) {
+            $query->with('post_media')
+                ->withCount('likes')
+                ->when(
+                    $authUser,
+                    fn($q) => $q
+                        ->withExists(['likes as is_liked_by' => fn($q2) => $q2->where('user_id', $authUser->id)])
+                        ->withExists(['saved_by_users as is_saved_by' => fn($q2) => $q2->where('user_id', $authUser->id)])
+                )
+                ->orderBy('created_at', 'desc');
+        };
+
+        $user->load([
+            'user_posts' => $withLikesAndSaved,
+            'saved_posts' => function ($query) use ($withLikesAndSaved) {
+                $withLikesAndSaved($query->with('user.profile'));
+            }
+        ]);
 
         return Inertia::render('Profile/Profile', [
             'user' => UserProfileResource::make($user)->resolve()
@@ -68,7 +74,7 @@ class ProfileController extends Controller
         $data = $request->validate([
             'fullname' => 'nullable|string|max:32',
             'bio' => 'nullable|string|max:64',
-            'avatar' => 'nullable|image|max:2048',
+            'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
 

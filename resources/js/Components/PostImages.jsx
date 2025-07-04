@@ -22,7 +22,7 @@ export default function PostImages({ images }) {
             : "row-span-3";
 
     const sources = images.map(
-        (img) => `storage/posts/media/originals/${img.url}`
+        (img) => `/storage/posts/media/originals/${img.url}`
     );
 
     const openLightbox = (index) => {
@@ -35,7 +35,7 @@ export default function PostImages({ images }) {
             <div>
                 <FsLightbox toggler={toggler} sources={sources} slide={slide} />
                 <img
-                    src={`storage/posts/media/medium/${images[0].url}`}
+                    src={`/storage/posts/media/medium/${images[0].url}`}
                     className="w-full rounded object-cover max-h-[700px] cursor-pointer"
                     loading="lazy"
                     alt=""
@@ -56,7 +56,7 @@ export default function PostImages({ images }) {
                 onClick={() => openLightbox(0)}
             >
                 <img
-                    src={`storage/posts/media/medium/${images[0].url}`}
+                    src={`/storage/posts/media/medium/${images[0].url}`}
                     className="w-full h-full object-cover rounded-md cursor-pointer"
                     loading="lazy"
                     alt=""
@@ -70,7 +70,7 @@ export default function PostImages({ images }) {
                     onClick={() => openLightbox(index + 1)}
                 >
                     <img
-                        src={`storage/posts/media/thumbs/${img.url}`}
+                        src={`/storage/posts/media/thumbs/${img.url}`}
                         className="w-full h-full object-cover rounded-md"
                         loading="lazy"
                         alt=""

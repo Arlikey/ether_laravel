@@ -42,7 +42,12 @@ export default function Home() {
                         />
                     ))
                 ) : (
-                    <div>No posts here yet.</div>
+                    <div className="flex flex-1 items-center justify-center">
+                        <span className="text-center text-2xl text-gray-700">
+                            Your feed is currently empty. <br /> 📰 Follow
+                            people to see their posts here.
+                        </span>
+                    </div>
                 )}
             </div>
         </AuthenticatedLayout>

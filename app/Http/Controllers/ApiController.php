@@ -34,6 +34,9 @@ class ApiController extends Controller
                 $query->withExists([
                     'likes as is_liked_by' => function ($q) use ($authUser) {
                         $q->where('user_id', $authUser->id);
+                    },
+                    'saved_by_users as is_saved_by' => function ($q) use ($authUser) {
+                        $q->where('user_id', $authUser->id);
                     }
                 ]);
             })

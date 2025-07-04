@@ -2,7 +2,7 @@ import { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { UserElement } from "@/Components/UserElement";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 export default function AuthenticatedLayout({ auth, children, header }) {
     const [searchResults, setSearchResults] = useState(null);
@@ -28,7 +28,7 @@ export default function AuthenticatedLayout({ auth, children, header }) {
                                     Search results:
                                 </p>
                                 {searchResults.length > 0 ? (
-                                    <ul className="flex flex-col flex-1">
+                                    <ul className="flex flex-1 mx-8 flex-col gap-3 overflow-y-auto">
                                         {searchResults.map((user) => (
                                             <li key={user.id}>
                                                 <UserElement user={user} />
@@ -36,7 +36,12 @@ export default function AuthenticatedLayout({ auth, children, header }) {
                                         ))}
                                     </ul>
                                 ) : (
-                                    <p>No users found.</p>
+                                    <div className="flex flex-1 items-center justify-center">
+                                        <span className="text-center text-2xl text-gray-700">
+                                            No results found. <br />
+                                            🔎 Try a different keyword.
+                                        </span>
+                                    </div>
                                 )}
                             </div>
                         </>

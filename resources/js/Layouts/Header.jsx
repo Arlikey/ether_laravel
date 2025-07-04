@@ -1,5 +1,4 @@
 import Dropdown from "@/Components/Dropdown";
-import NavLink from "@/Components/NavLink";
 import UserAvatar from "@/Components/UserAvatar";
 import UserSearch from "@/Components/UserSearch";
 import { Link } from "@inertiajs/react";

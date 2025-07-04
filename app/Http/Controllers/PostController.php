@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PostMedia;
+use App\Http\Resources\PostResource;
 use App\Models\UserPost;
 use Exception;
 use File;
@@ -14,14 +14,6 @@ use Str;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -38,12 +30,17 @@ class PostController extends Controller
         $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'media.*' => 'file|mimes:jpg,jpeg,png,mp4|max:20480',
+            'media.*' => 'file|mimes:jpg,jpeg,png,webp,mp4|max:20480',
         ]);
 
-
-        if (!$request->title && !$request->description && !$request->hasFile('media')) {
-            return back()->withErrors(['message' => 'You must provide a title, description, or media.']);
+        if (
+            !$request->title &&
+            !$request->description &&
+            !$request->hasFile('media')
+        ) {
+            return back()->withErrors([
+                'message' => 'You must provide a title, description, or media.',
+            ]);
         }
 
         $user = auth()->user();
@@ -54,8 +51,13 @@ class PostController extends Controller
             'user_id' => $user->id,
         ]);
 
-        if ($request->hasFile('media')) {
-            foreach ($request->file('media') as $index => $file) {
+        $files = $request->file('media');
+        if ($files && !is_array($files)) {
+            $files = [$files];
+        }
+
+        if ($files) {
+            foreach ($files as $index => $file) {
                 $mime = $file->getMimeType();
                 $type = str_starts_with($mime, 'video') ? 'video' : 'image';
 
@@ -65,14 +67,22 @@ class PostController extends Controller
                 $originalPath = $file->storeAs('posts/media/originals', $filename, 'public');
 
                 if ($type === 'image') {
-                    File::ensureDirectoryExists(storage_path('app/public/posts/media/medium'));
-                    File::ensureDirectoryExists(storage_path('app/public/posts/media/thumbs'));
+                    try {
+                        File::ensureDirectoryExists(storage_path('app/public/posts/media/medium'));
+                        File::ensureDirectoryExists(storage_path('app/public/posts/media/thumbs'));
 
-                    $mediumPath = storage_path("app/public/posts/media/medium/{$filename}");
-                    Image::read($file)->cover(640, 960)->save($mediumPath);
+                        $mediumPath = storage_path("app/public/posts/media/medium/{$filename}");
+                        $thumbPath = storage_path("app/public/posts/media/thumbs/{$filename}");
 
-                    $thumbPath = storage_path("app/public/posts/media/thumbs/{$filename}");
-                    Image::read($file)->cover(320, 480)->save($thumbPath);
+                        Image::read($file)->cover(640, 960)->save($mediumPath);
+                        Image::read($file)->cover(320, 480)->save($thumbPath);
+
+                    } catch (Exception $e) {
+                        $post->delete();
+                        return back()->withErrors([
+                            'message' => 'Image processing failed: ' . $e->getMessage(),
+                        ]);
+                    }
                 }
 
                 $post->post_media()->create([
@@ -83,6 +93,14 @@ class PostController extends Controller
             }
         }
 
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Post created successfully!',
+                'post_id' => $post->id,
+            ]);
+        }
+
         return Redirect::route('profile.index', $user->slug)
             ->with('status', 'Post created successfully!');
     }
@@ -90,9 +108,23 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(UserPost $post)
     {
-        //
+        $authUser = auth()->user();
+
+        $post->load(['post_media', 'user.profile'])
+            ->loadCount('likes');
+
+        if ($authUser) {
+            $post->loadExists([
+                'likes as is_liked_by' => fn($q) => $q->where('user_id', $authUser->id),
+                'saved_by_users as is_saved_by' => fn($q) => $q->where('user_id', $authUser->id),
+            ]);
+        }
+
+        return Inertia::render('Posts/Reel', [
+            'post' => PostResource::make($post)->resolve()
+        ]);
     }
 
     /**

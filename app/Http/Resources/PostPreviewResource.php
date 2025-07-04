@@ -18,9 +18,11 @@ class PostPreviewResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
+            'user' => $this->user,
             'created_at' => $this->created_at?->toDateTimeString(),
             'likesCount' => $this->likes_count,
             'isLikedBy' => (bool) $this->is_liked_by,
+            'isSavedBy' => (bool) $this->is_saved_by,
             'media' => $this->post_media->first() ? MediaResource::make($this->post_media->first())->resolve() : null,
         ];
     }

@@ -22,6 +22,7 @@ export default function PostCreate() {
         setLoading(true);
         post(route("posts.store"), {
             onError: (errors) => {
+                console.log(errors);
                 toast.error(errors.message || "Something went wrong.");
             },
             onFinish: () => {
@@ -39,10 +40,6 @@ export default function PostCreate() {
             }}
         >
             <Head title="Create" />
-            <link
-                href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
-                rel="stylesheet"
-            />
 
             <form
                 onSubmit={submit}
@@ -51,7 +48,6 @@ export default function PostCreate() {
             >
                 <div className="border-b border-gray-300 p-4">
                     <h2 className="text-3xl text-gray-700">Create Post</h2>
-                    <InputError message={errors.content} className="mt-2" />
                 </div>
                 <div className="flex flex-1">
                     <div className="flex flex-1 basis-2/12 justify-start flex-col border-r border-gray-300 py-4">
@@ -102,6 +98,12 @@ export default function PostCreate() {
                                     ...acceptedFiles,
                                 ])
                             }
+                            accept={{
+                                "image/jpeg": [".jpeg", ".jpg"],
+                                "image/png": [".png"],
+                                "image/webp": [".webp"],
+                            }}
+                            
                         >
                             {({ getRootProps, getInputProps }) => (
                                 <section className="flex flex-1">
@@ -155,6 +157,10 @@ function Toolbar({ setData }) {
                 });
             });
         }
+
+        return () => {
+            quillRef.current = null;
+        };
     }, []);
     return (
         <div className="flex flex-1 flex-col">
@@ -197,7 +203,7 @@ function Toolbar({ setData }) {
             <div
                 id="editor"
                 ref={editorRef}
-                className="bg-white border border-t-0 border-gray-300 rounded-b-md"
+                className="bg-white border border-t-0 border-gray-300 rounded-b-md max-h-[calc(100vh-32rem)]"
             ></div>
         </div>
     );

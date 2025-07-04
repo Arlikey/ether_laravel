@@ -22,6 +22,7 @@ class PostResource extends JsonResource
             'created_at' => $this->created_at?->toDateTimeString(),
             'likesCount' => $this->likes_count,
             'isLikedBy' => (bool) $this->is_liked_by,
+            'isSavedBy' => (bool) $this->is_saved_by,
             'media' => MediaResource::collection($this->post_media)->resolve(),
         ];
     }

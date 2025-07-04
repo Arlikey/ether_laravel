@@ -109,7 +109,7 @@
 }
 
 .post-preview-text-white {
-    text-shadow: 0 0 1px #000000cc, 0 0 8px #ffffff33;
+    text-shadow: 0 0 2px #000000cc, 0 0 8px #ffffff33;
 }
 
 .post-preview-text-black {
@@ -117,5 +117,5 @@
 }
 
 .post-preview-no-media {
-    @apply py-12 !important;
+    @apply py-8 !important;
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostLikeController;
+use App\Http\Controllers\PostSavingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Foundation\Application;
@@ -55,8 +56,11 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('/post', [PostController::class, 'create'])->name('posts.create');
     Route::post('/post', [PostController::class, 'store'])->name('posts.store');
-    Route::post('/posts/{post}/like', [PostLikeController::class, 'store'])->name('posts.like');
-    Route::delete('/posts/{post}/like', [PostLikeController::class, 'destroy'])->name('posts.unlike');
+    Route::get('/post/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::post('/post/{post}/like', [PostLikeController::class, 'store'])->name('posts.like');
+    Route::delete('/post/{post}/like', [PostLikeController::class, 'destroy'])->name('posts.unlike');
+    Route::post('/post/{post}/save', [PostSavingController::class, 'store'])->name('posts.save');
+    Route::delete('/post/{post}/save', [PostSavingController::class, 'destroy'])->name('posts.unsave');
 });
 
 require __DIR__ . '/auth.php';

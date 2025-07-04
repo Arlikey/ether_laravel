@@ -6,7 +6,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import UserAvatar from "@/Components/UserAvatar";
 import { router, useForm } from "@inertiajs/react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function EditProfileModal({ edit, setEdit, user, setUser }) {
@@ -63,9 +63,9 @@ export default function EditProfileModal({ edit, setEdit, user, setUser }) {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
                 <h2 className="text-xl font-semibold">Edit Profile</h2>
                 <div className="flex">
-                    <div className="relative mr-4 group">
+                    <div className="relative mr-4 group rounded-full shadow-md max-w-44">
                         <UserAvatar
-                            size={180}
+                            size={176}
                             avatar={
                                 avatarPreview ||
                                 (user.profile.avatar
@@ -76,17 +76,28 @@ export default function EditProfileModal({ edit, setEdit, user, setUser }) {
                         />
                         <input
                             type="file"
-                            accept="image/*"
+                            accept="image/.jpeg,.jpg,.png,.webp"
                             className="opacity-0 absolute top-0 left-0 w-full h-full cursor-pointer"
                             onChange={(e) => {
                                 const file = e.target.files[0];
                                 if (file) {
+                                    const allowedTypes = [
+                                        "image/jpeg",
+                                        "image/jpg",
+                                        "image/png",
+                                        "image/webp",
+                                    ];
+                                    if (!allowedTypes.includes(file.type)) {
+                                        toast.error(
+                                            "Invalid file type. Only JPEG, PNG, or WEBP images are allowed."
+                                        );
+                                        return;
+                                    }
                                     setData("avatar", file);
                                     setAvatarPreview(URL.createObjectURL(file));
                                 }
                             }}
                         />
-                        <InputError message={errors.avatar} className="mt-2" />
                         <div className="opacity-0 pointer-events-none absolute inset-0 bg-black bg-opacity-50 text-white text-xl flex items-center justify-center rounded-full transition-opacity duration-100 group-hover:opacity-100">
                             <i className="bi bi-pencil text-3xl"></i>
                         </div>
@@ -130,22 +141,25 @@ export default function EditProfileModal({ edit, setEdit, user, setUser }) {
                     </div>
                 </div>
 
-                <div className="flex justify-end gap-4">
-                    <SecondaryButton
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={() => setEdit(false)}
-                    >
-                        Cancel
-                    </SecondaryButton>
-                    <PrimaryButton
-                        type="submit"
-                        as="button"
-                        disabled={loading}
-                        className="btn btn-primary"
-                    >
-                        Save
-                    </PrimaryButton>
+                <div className="flex justify-between">
+                    <InputError message={errors.avatar} className="mt-2" />
+                    <div className="flex flex-1 gap-4 justify-end">
+                        <SecondaryButton
+                            type="button"
+                            className="btn btn-secondary"
+                            onClick={() => setEdit(false)}
+                        >
+                            Cancel
+                        </SecondaryButton>
+                        <PrimaryButton
+                            type="submit"
+                            as="button"
+                            disabled={loading}
+                            className="btn btn-primary"
+                        >
+                            Save
+                        </PrimaryButton>
+                    </div>
                 </div>
             </form>
         </Modal>

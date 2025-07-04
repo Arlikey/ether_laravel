@@ -22,6 +22,7 @@ class UserProfileResource extends JsonResource
             'slug' => $this->slug,
             'profile' => $this->profile,
             'posts' => PostPreviewResource::collection($this->whenLoaded('user_posts'))->resolve(),
+            'savedPosts' => PostPreviewResource::collection($this->whenLoaded('saved_posts'))->resolve(),
             'isFollowing' => $authUser ? $authUser->isFollowing($this->id) : false,
             'followersCount' => $this->followers_count,
             'followingCount' => $this->followings_count,

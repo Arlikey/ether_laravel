@@ -37,7 +37,7 @@ export function UserElement({
                     href={route("profile.index", user.slug)}
                     className="flex gap-2 items-center flex-1"
                 >
-                    <div className="transition-transform duration-300 ease-in-out group-hover:scale-125 group-hover:translate-x-1/3">
+                    <div className="rounded-full shadow-md transition-transform duration-300 ease-in-out group-hover:scale-125 group-hover:translate-x-1/3">
                         <UserAvatar
                             avatar={user?.profile?.avatar}
                             alt={user?.username}
