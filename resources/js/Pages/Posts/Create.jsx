@@ -23,7 +23,6 @@ export default function PostCreate() {
         setLoading(true);
         post(route("posts.store"), {
             onError: (errors) => {
-                console.log(errors);
                 toast.error(errors.message || "Something went wrong.");
             },
             onFinish: () => {

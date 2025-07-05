@@ -114,8 +114,11 @@ class PostController extends Controller
     {
         $authUser = auth()->user();
 
-        $post->load(['post_media', 'user.profile'])
-            ->loadCount('likes');
+        $post->load([
+            'post_media',
+            'user.profile',
+            'comments.user.profile',
+        ])->loadCount('likes', 'comments');
 
         if ($authUser) {
             $post->loadExists([
@@ -149,13 +152,13 @@ class PostController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(UserPost $post)
-{
-    try {
-        $post->delete();
-        return response()->json(['message' => 'Post deleted successfully!']);
-    } catch (\Throwable $th) {
-        Log::error('Failed to delete post', ['error' => $th]);
-        return response()->json(['error' => 'Something went wrong'], 500);
+    {
+        try {
+            $post->delete();
+            return response()->json(['message' => 'Post deleted successfully!']);
+        } catch (\Throwable $th) {
+            Log::error('Failed to delete post', ['error' => $th]);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
-}
 }

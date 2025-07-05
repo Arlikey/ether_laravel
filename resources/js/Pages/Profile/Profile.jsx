@@ -128,7 +128,7 @@ export default function Profile({ user: initialUser }) {
                     >
                         <i className="bi bi-grid-1x2 text-2xl"></i>
                     </NavButton>
-                    {auth.user.id === user.id ? (
+                    {auth.user?.id === user.id ? (
                         <NavButton
                             className="py-2 px-12"
                             active={activeTab === "bookmarks"}

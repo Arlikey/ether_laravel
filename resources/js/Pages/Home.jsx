@@ -20,7 +20,6 @@ export default function Home() {
     };
 
     useEffect(() => {
-        console.log(flash);
         handlePosts();
     }, []);
     return (

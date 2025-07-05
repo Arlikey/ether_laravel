@@ -65,7 +65,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/post/{post}/save', [PostSavingController::class, 'store'])->name('posts.save');
     Route::delete('/post/{post}/save', [PostSavingController::class, 'destroy'])->name('posts.unsave');
     Route::post('/post/{post}/comments', [PostCommentController::class, 'store'])->name('comments.store');
-
 });
 
 require __DIR__ . '/auth.php';

@@ -32,7 +32,6 @@ export function UserElement({
             className={`min-h-[96px] transition-all duration-300 ease-in-out group hover:shadow-lg rounded-lg overflow-hidden shadow-md bg-white p-4 flex flex-col gap-2 ${className}`}
         >
             <div className="flex justify-between items-center relative">
-                {console.log(user)}
                 <Link
                     href={route("profile.index", user.slug)}
                     className="flex gap-2 items-center flex-1"

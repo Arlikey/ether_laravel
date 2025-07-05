@@ -34,7 +34,7 @@ class PostCommentController extends Controller
 
         $comment = $post->comments()->create([
             'user_id' => auth()->id(),
-            'comment_text' => $request->body,
+            'comment_text' => $request->comment_text,
         ]);
 
         return response()->json([

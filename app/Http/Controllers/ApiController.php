@@ -28,8 +28,8 @@ class ApiController extends Controller
         $authUser = auth()->user();
 
         $posts = UserPost::query()
-            ->with(['post_media', 'user.profile'])
-            ->withCount('likes')
+            ->with(['post_media', 'user.profile', 'comments.user.profile'])
+            ->withCount(['likes', 'comments'])
             ->when($authUser, function ($query) use ($authUser) {
                 $query->withExists([
                     'likes as is_liked_by' => function ($q) use ($authUser) {

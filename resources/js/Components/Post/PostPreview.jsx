@@ -38,7 +38,7 @@ export default function PostPreview({ post, isSavings }) {
                         } text-xl`}
                     ></i>
                 </span>
-                {auth.user.id !== post.user.id && isSavings && (
+                {auth.user?.id !== post.user.id && isSavings && (
                     <div className="flex items-center gap-2 absolute left-4 top-2">
                         <UserAvatar
                             size={32}

@@ -119,3 +119,11 @@
 .post-preview-no-media {
     @apply py-8 !important;
 }
+
+.phpdebugbar {
+    visibility: hidden;
+}
+
+body {
+    margin-bottom: 0 !important;
+}
