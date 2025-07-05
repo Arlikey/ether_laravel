@@ -38,10 +38,14 @@ class UserPost extends Model
         return $this->belongsToMany(User::class, 'post_savings', 'post_id', 'user_id')->withTimestamps();
     }
 
-
     public function isSavedBy($user)
     {
         return $this->saved_by_users()->where('user_id', $user->id)->exists();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(PostComment::class, 'post_id');
     }
 }
 

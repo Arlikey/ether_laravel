@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\PostSavingController;
@@ -63,6 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/post/{post}/like', [PostLikeController::class, 'destroy'])->name('posts.unlike');
     Route::post('/post/{post}/save', [PostSavingController::class, 'store'])->name('posts.save');
     Route::delete('/post/{post}/save', [PostSavingController::class, 'destroy'])->name('posts.unsave');
+    Route::post('/post/{post}/comments', [PostCommentController::class, 'store'])->name('comments.store');
+
 });
 
 require __DIR__ . '/auth.php';
