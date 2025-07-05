@@ -3,11 +3,15 @@ import PostImages from "./PostImages";
 import UserAvatar from "./UserAvatar";
 import LikeButton from "./LikeButton";
 import { useState } from "react";
-import { Link } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import SaveButton from "./SaveButton";
 import { getRelativeDate } from "@/dataFormatting";
+import Dropdown from "./Dropdown";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-export default function Post({ post: initialPost }) {
+export default function Post({ post: initialPost, className = "" }) {
+    const { auth } = usePage().props;
     const [post, setPost] = useState(initialPost);
     const handleLikeChange = async (isLiked) => {
         const updatedPost = {
@@ -24,11 +28,46 @@ export default function Post({ post: initialPost }) {
         };
         setPost(updatedPost);
     };
+
+    const handlePostDestroy = async (post) => {
+        if (!confirm("Are you sure you want to delete this post?")) return;
+
+        try {
+            const response = await axios.delete(
+                route("posts.destroy", post.id)
+            );
+            router.visit(route("home"));
+        } catch (error) {
+            toast.error("Failed to delete post");
+        }
+    };
+
+    const handleCopyLink = () => {
+        const url = route("posts.show", post.id);
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard
+                .writeText(url)
+                .then(() => toast.success("Link copied!"))
+                .catch(() => toast.error("Failed to copy link"));
+        } else {
+            const textArea = document.createElement("textarea");
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand("copy");
+                toast.success("Link copied!");
+            } catch (err) {
+                toast.error("Failed to copy link.");
+            }
+            document.body.removeChild(textArea);
+        }
+    };
     return (
         <div
-            className={`w-[680px] flex flex-col items-start gap-4 rounded-2xl shadow-md bg-white p-6 mb-6 max-h-[90vh] ${
-                post.media.length <= 0 ? "h-fit" : ""
-            }`}
+            className={`w-[680px] flex flex-col items-start gap-4 rounded-2xl shadow-md bg-white p-6 max-h-[90vh] h-fit ${className}`}
         >
             <div className="flex justify-between items-center w-full">
                 <div className="flex items-center gap-2">
@@ -50,9 +89,31 @@ export default function Post({ post: initialPost }) {
                         </span>
                     </div>
                 </div>
-                <div className="text-xl text-gray-700 cursor-pointer hover:scale-110 hover:text-gray-900 active:text-gray-700 transition duration-100">
-                    <i className="bi bi-three-dots"></i>
-                </div>
+                <Dropdown>
+                    <Dropdown.Trigger>
+                        <div className="text-xl text-gray-700 cursor-pointer hover:scale-110 hover:text-gray-900 active:text-gray-700 transition duration-100">
+                            <i className="bi bi-three-dots"></i>
+                        </div>
+                    </Dropdown.Trigger>
+
+                    <Dropdown.Content>
+                        <Dropdown.Link
+                            href={route("posts.show", post.id)}
+                            as="button"
+                        >
+                            Go to Post
+                        </Dropdown.Link>
+                        {auth.user?.id === post.user.id && (
+                            <Dropdown.Link
+                                onClick={() => handlePostDestroy(post)}
+                                as="button"
+                                className="flex text-red-600 gap-2"
+                            >
+                                <i className="bi bi-trash3"></i>Delete
+                            </Dropdown.Link>
+                        )}
+                    </Dropdown.Content>
+                </Dropdown>
             </div>
             <div className="flex flex-col w-full gap-4 overflow-y-auto">
                 {post.title ? (
@@ -105,8 +166,11 @@ export default function Post({ post: initialPost }) {
                     </div>
                 </div>
                 <div className="flex gap-6">
-                    <div className="flex items-center">
-                        <i className="bi bi-link-45deg text-xl"></i>
+                    <div
+                        className="flex items-center text-xl text-gray-700 cursor-pointer hover:scale-110 hover:text-gray-900 active:text-gray-700 transition duration-100"
+                        onClick={handleCopyLink}
+                    >
+                        <i className="bi bi-link-45deg"></i>
                     </div>
                     <div className="flex items-center">
                         <i className="bi bi-flag text-xl"></i>

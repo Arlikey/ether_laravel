@@ -172,8 +172,7 @@ export default function Profile({ user: initialUser }) {
                                     key={post.id}
                                     className="break-inside-avoid w-full"
                                 >
-                                    {console.log(post)}
-                                    <PostPreview post={post} />
+                                    <PostPreview post={post} isSavings={true} />
                                 </div>
                             ))}
                         </Masonry>

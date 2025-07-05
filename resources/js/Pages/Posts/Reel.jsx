@@ -8,13 +8,19 @@ export default function Reel({ post }) {
         <AuthenticatedLayout
             auth={auth}
             header={{
-                icon: <i className="bi bi-plus-circle"></i>,
-                title: "Create Post",
+                icon: (
+                    <i
+                        className={`bi bi-${
+                            post.media.length > 0 ? "image" : "journal-text"
+                        }`}
+                    ></i>
+                ),
+                title: "Post",
             }}
         >
             <Head title="Create" />
-            <div className="flex flex-1 mt-6 justify-center overflow-y-auto">
-                <Post post={post} />
+            <div className="flex flex-1 py-4 justify-center overflow-y-auto">
+                <Post post={post}/>
             </div>
         </AuthenticatedLayout>
     );

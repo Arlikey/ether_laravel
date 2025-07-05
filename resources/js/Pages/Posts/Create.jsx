@@ -101,9 +101,7 @@ export default function PostCreate() {
                             accept={{
                                 "image/jpeg": [".jpeg", ".jpg"],
                                 "image/png": [".png"],
-                                "image/webp": [".webp"],
                             }}
-                            
                         >
                             {({ getRootProps, getInputProps }) => (
                                 <section className="flex flex-1">

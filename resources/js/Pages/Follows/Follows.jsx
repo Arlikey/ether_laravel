@@ -60,27 +60,28 @@ export default function Friends({
                     </NavButton>
                 </div>
                 <div className="flex flex-col flex-1 gap-4 my-6 px-8">
-                    {activeTab === "following" && followings.length <= 0 ? (
+                    {activeTab === "following" ? (
+                        followings.length === 0 ? (
+                            <div className="flex flex-1 items-center justify-center">
+                                <span className="text-center text-2xl text-gray-700">
+                                    You’re not following anyone yet. <br />
+                                    🔍 Find people you’d like to follow!
+                                </span>
+                            </div>
+                        ) : (
+                            followings.map((user) => (
+                                <UserElement
+                                    key={user.id}
+                                    user={user}
+                                    onUserChange={handleUserChange}
+                                />
+                            ))
+                        )
+                    ) : followers.length === 0 ? (
                         <div className="flex flex-1 items-center justify-center">
                             <span className="text-center text-2xl text-gray-700">
-                                You’re not following anyone yet. <br />
-                                🔍 Find people you’d like to follow!
-                            </span>
-                        </div>
-                    ) : (
-                        followings.map((user) => (
-                            <UserElement
-                                key={user.id}
-                                user={user}
-                                onUserChange={handleUserChange}
-                            />
-                        ))
-                    )}
-                    {activeTab === "followers" && followers.length <= 0 ? (
-                        <div className="flex flex-1 items-center justify-center">
-                            <span className="text-center text-2xl text-gray-700">
-                                You don’t have any followers yet. <br /> 🤝
-                                Share something interesting to attract them!
+                                You don’t have any followers yet. <br />
+                                🤝 Share something interesting to attract them!
                             </span>
                         </div>
                     ) : (

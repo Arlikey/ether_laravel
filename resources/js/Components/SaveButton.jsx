@@ -41,6 +41,7 @@ export default function SaveButton({
                 as="button"
                 onClick={handleSave}
                 disabled={loading}
+                className="hover:animate-wiggle"
             >
                 <i
                     className={`bi bi-bookmark${

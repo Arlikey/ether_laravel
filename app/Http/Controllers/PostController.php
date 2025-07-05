@@ -9,7 +9,9 @@ use File;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Intervention\Image\Laravel\Facades\Image;
+use Log;
 use Redirect;
+use Route;
 use Str;
 
 class PostController extends Controller
@@ -30,7 +32,7 @@ class PostController extends Controller
         $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'media.*' => 'file|mimes:jpg,jpeg,png,webp,mp4|max:20480',
+            'media.*' => 'file|mimes:jpg,jpeg,png,mp4|max:20480',
         ]);
 
         if (
@@ -146,8 +148,14 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(UserPost $post)
+{
+    try {
+        $post->delete();
+        return response()->json(['message' => 'Post deleted successfully!']);
+    } catch (\Throwable $th) {
+        Log::error('Failed to delete post', ['error' => $th]);
+        return response()->json(['error' => 'Something went wrong'], 500);
     }
+}
 }

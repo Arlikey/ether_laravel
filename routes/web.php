@@ -35,6 +35,7 @@ use Inertia\Inertia;
 
 Route::get('/', [MainController::class, 'index'])->name('home');
 Route::get('/api/posts', [ApiController::class, 'getPosts'])->name('posts.index');
+Route::get('/post/{post}', [PostController::class, 'show'])->name('posts.show');
 
 Route::get('/api/search-users', [ApiController::class, 'liveSearch']);
 
@@ -56,7 +57,8 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('/post', [PostController::class, 'create'])->name('posts.create');
     Route::post('/post', [PostController::class, 'store'])->name('posts.store');
-    Route::get('/post/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
     Route::post('/post/{post}/like', [PostLikeController::class, 'store'])->name('posts.like');
     Route::delete('/post/{post}/like', [PostLikeController::class, 'destroy'])->name('posts.unlike');
     Route::post('/post/{post}/save', [PostSavingController::class, 'store'])->name('posts.save');

@@ -4,7 +4,7 @@ import { Head, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-    const { auth } = usePage().props;
+    const { auth, flash } = usePage().props;
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -20,6 +20,7 @@ export default function Home() {
     };
 
     useEffect(() => {
+        console.log(flash);
         handlePosts();
     }, []);
     return (
@@ -32,7 +33,7 @@ export default function Home() {
         >
             <Head title="Home" />
 
-            <div className="flex flex-1 flex-col overflow-y-auto pt-4 items-center">
+            <div className="flex flex-1 flex-col overflow-y-auto pt-4 gap-6 items-center pb-6">
                 {posts.length > 0 ? (
                     posts.map((post) => (
                         <Post
