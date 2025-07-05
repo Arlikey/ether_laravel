@@ -1,4 +1,4 @@
-import Post from "@/Components/Post";
+import Post from "@/Components/Post/Post";
 import AuthenticatedLayout from "@/Layouts/Layout";
 import { Head, usePage } from "@inertiajs/react";
 

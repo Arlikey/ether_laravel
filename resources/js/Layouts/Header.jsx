@@ -1,6 +1,6 @@
 import Dropdown from "@/Components/Dropdown";
-import UserAvatar from "@/Components/UserAvatar";
-import UserSearch from "@/Components/UserSearch";
+import UserAvatar from "@/Components/User/UserAvatar";
+import UserSearch from "@/Components/User/UserSearch";
 import { Link } from "@inertiajs/react";
 
 export default function Header({ user, header, onResults }) {

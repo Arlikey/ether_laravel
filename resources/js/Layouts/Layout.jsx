@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { UserElement } from "@/Components/UserElement";
+import { UserElement } from "@/Components/User/UserElement";
 import { ToastContainer } from "react-toastify";
 
 export default function AuthenticatedLayout({ auth, children, header }) {

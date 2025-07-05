@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 export default function PostCreate() {
     const { auth } = usePage().props;
+    const [previews, setPreviews] = useState([]);
     const { data, setData, post, processing, errors } = useForm({
         title: "",
         description: "",
@@ -31,6 +32,18 @@ export default function PostCreate() {
         });
     };
 
+    useEffect(() => {
+        const newPreviews = data.media.map((file) => ({
+            name: file.name,
+            url: URL.createObjectURL(file),
+        }));
+        setPreviews(newPreviews);
+
+        return () => {
+            newPreviews.forEach((preview) => URL.revokeObjectURL(preview.url));
+        };
+    }, [data.media]);
+
     return (
         <AuthenticatedLayout
             auth={auth}
@@ -50,7 +63,7 @@ export default function PostCreate() {
                     <h2 className="text-3xl text-gray-700">Create Post</h2>
                 </div>
                 <div className="flex flex-1">
-                    <div className="flex flex-1 basis-2/12 justify-start flex-col border-r border-gray-300 py-4">
+                    <div className="flex flex-1 basis-3/12 justify-start flex-col border-r border-gray-300 py-4">
                         <div className="flex px-6">
                             <TextInput
                                 id="title"
@@ -83,21 +96,42 @@ export default function PostCreate() {
                     </div>
                     <div className="flex flex-1 p-6 flex-col">
                         <div className="flex flex-col flex-1">
-                            {data.media.length > 0 && (
-                                <ul className="text-sm text-gray-700">
-                                    {data.media.map((file, index) => (
-                                        <li key={index}>{file.name}</li>
+                            {previews.length > 0 ? (
+                                <div className="grid grid-cols-4 gap-4 mb-4">
+                                    {previews.map((file, index) => (
+                                        <div key={index} className="relative">
+                                            <img
+                                                src={file.url}
+                                                alt={file.name}
+                                                className="w-full h-full object-cover rounded shadow"
+                                            />
+                                        </div>
                                     ))}
-                                </ul>
+                                </div>
+                            ) : (
+                                <div className="flex flex-1 flex-col justify-center items-center text-xl gap-2 text-gray-400">
+                                    <i class="bi bi-card-image text-6xl"></i>
+                                    Nothing to see here… yet.
+                                </div>
                             )}
                         </div>
                         <Dropzone
-                            onDrop={(acceptedFiles) =>
+                            onDrop={(acceptedFiles) => {
+                                if (
+                                    data.media.length + acceptedFiles.length >
+                                    8
+                                ) {
+                                    toast.error(
+                                        "You can upload up to 8 images."
+                                    );
+                                    return;
+                                }
+
                                 setData("media", [
                                     ...data.media,
                                     ...acceptedFiles,
-                                ])
-                            }
+                                ]);
+                            }}
                             accept={{
                                 "image/jpeg": [".jpeg", ".jpg"],
                                 "image/png": [".png"],

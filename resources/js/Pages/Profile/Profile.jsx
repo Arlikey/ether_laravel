@@ -1,11 +1,11 @@
 import AuthenticatedLayout from "@/Layouts/Layout";
 import { Head, Link, usePage } from "@inertiajs/react";
-import UserAvatar from "@/Components/UserAvatar";
+import UserAvatar from "@/Components/User/UserAvatar";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { FollowButton } from "@/Components/FollowButton";
-import PostPreview from "@/Components/PostPreview";
+import PostPreview from "@/Components/Post/PostPreview";
 import Masonry from "react-responsive-masonry";
 import EditProfileModal from "./EditProfileModal";
 import NavButton from "@/Components/NavButton";

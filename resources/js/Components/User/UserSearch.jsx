@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import TextInput from "./TextInput";
+import TextInput from "../TextInput";
 
 export default function UserSearch({ onResults }) {
     const [query, setQuery] = useState("");

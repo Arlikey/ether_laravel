@@ -1,18 +1,23 @@
 import "quill/dist/quill.snow.css";
 import PostImages from "./PostImages";
-import UserAvatar from "./UserAvatar";
+import UserAvatar from "../User/UserAvatar";
 import LikeButton from "./LikeButton";
 import { useState } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
 import SaveButton from "./SaveButton";
 import { getRelativeDate } from "@/dataFormatting";
-import Dropdown from "./Dropdown";
+import Dropdown from "../Dropdown";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Modal from "../Modal";
+import SecondaryButton from "../SecondaryButton";
+import PrimaryButton from "../PrimaryButton";
 
 export default function Post({ post: initialPost, className = "" }) {
     const { auth } = usePage().props;
     const [post, setPost] = useState(initialPost);
+    const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
     const handleLikeChange = async (isLiked) => {
         const updatedPost = {
             ...post,
@@ -30,8 +35,8 @@ export default function Post({ post: initialPost, className = "" }) {
     };
 
     const handlePostDestroy = async (post) => {
-        if (!confirm("Are you sure you want to delete this post?")) return;
-
+        if (loading) return;
+        setLoading(true);
         try {
             const response = await axios.delete(
                 route("posts.destroy", post.id)
@@ -39,6 +44,7 @@ export default function Post({ post: initialPost, className = "" }) {
             router.visit(route("home"));
         } catch (error) {
             toast.error("Failed to delete post");
+            setLoading(false);
         }
     };
 
@@ -105,7 +111,10 @@ export default function Post({ post: initialPost, className = "" }) {
                         </Dropdown.Link>
                         {auth.user?.id === post.user.id && (
                             <Dropdown.Link
-                                onClick={() => handlePostDestroy(post)}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setShow(true);
+                                }}
                                 as="button"
                                 className="flex text-red-600 gap-2"
                             >
@@ -177,6 +186,28 @@ export default function Post({ post: initialPost, className = "" }) {
                     </div>
                 </div>
             </div>
+
+            <Modal show={show} onClose={() => setShow(false)} maxWidth="lg">
+                <div className="flex flex-col p-4 gap-6">
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-lg font-bold">Delete Post</h2>
+                    </div>
+                    <div className="">
+                        Are you sure, you want to delete post?
+                    </div>
+                    <div className="flex justify-end gap-2">
+                        <SecondaryButton onClick={() => setShow(false)}>
+                            Cancel
+                        </SecondaryButton>
+                        <PrimaryButton
+                            disabled={loading}
+                            onClick={() => handlePostDestroy(post)}
+                        >
+                            Delete
+                        </PrimaryButton>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 }

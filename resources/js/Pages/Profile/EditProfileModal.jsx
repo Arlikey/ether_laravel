@@ -4,7 +4,7 @@ import Modal from "@/Components/Modal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
-import UserAvatar from "@/Components/UserAvatar";
+import UserAvatar from "@/Components/User/UserAvatar";
 import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";

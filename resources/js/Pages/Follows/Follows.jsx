@@ -1,4 +1,4 @@
-import { UserElement } from "@/Components/UserElement";
+import { UserElement } from "@/Components/User/UserElement";
 import { Head, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/Layout";
 import { useState } from "react";

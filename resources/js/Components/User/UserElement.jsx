@@ -1,6 +1,6 @@
 import { Link } from "@inertiajs/react";
 import { useState, useEffect } from "react";
-import { FollowButton } from "./FollowButton";
+import { FollowButton } from "../FollowButton";
 import UserAvatar from "./UserAvatar";
 
 export function UserElement({

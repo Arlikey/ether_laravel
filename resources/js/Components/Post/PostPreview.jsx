@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
-import UserAvatar from "./UserAvatar";
+import UserAvatar from "../User/UserAvatar";
 import { getRelativeDate } from "@/dataFormatting";
 
 export default function PostPreview({ post, isSavings }) {
