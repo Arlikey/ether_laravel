@@ -129,19 +129,29 @@ export default function Profile({ user: initialUser }) {
                         <i className="bi bi-grid-1x2 text-2xl"></i>
                     </NavButton>
                     {auth.user?.id === user.id ? (
-                        <NavButton
-                            className="py-2 px-12"
-                            active={activeTab === "bookmarks"}
-                            onClick={() => setActiveTab("bookmarks")}
-                        >
-                            <i className="bi bi-bookmarks text-2xl"></i>
-                        </NavButton>
+                        <div>
+                            <NavButton
+                                className="py-2 px-12"
+                                active={activeTab === "liked"}
+                                onClick={() => setActiveTab("liked")}
+                            >
+                                <i className="bi bi-heart text-2xl"></i>
+                            </NavButton>
+                            <NavButton
+                                className="py-2 px-12"
+                                active={activeTab === "bookmarks"}
+                                onClick={() => setActiveTab("bookmarks")}
+                            >
+                                <i className="bi bi-bookmarks text-2xl"></i>
+                            </NavButton>
+                        </div>
                     ) : (
                         ""
                     )}
                 </div>
+                {console.log(user)}
                 <div className="flex flex-1 mx-16">
-                    {activeTab === "posts" && user.posts.length === 0 ? (
+                    {activeTab === "posts" && user.posts.length <= 0 ? (
                         <EmptyPostsBlock isOwner={auth.user?.id === user.id} />
                     ) : activeTab === "posts" ? (
                         <Masonry
@@ -159,9 +169,9 @@ export default function Profile({ user: initialUser }) {
                             ))}
                         </Masonry>
                     ) : activeTab === "bookmarks" &&
-                      user.savedPosts.length === 0 ? (
+                      user.savedPosts.length <= 0 ? (
                         <EmptySavedPostsBlock />
-                    ) : (
+                    ) : activeTab === "bookmarks" ? (
                         <Masonry
                             className="px-12 py-6"
                             columnsCount={4}
@@ -172,7 +182,30 @@ export default function Profile({ user: initialUser }) {
                                     key={post.id}
                                     className="break-inside-avoid w-full"
                                 >
-                                    <PostPreview post={post} isSavings={true} />
+                                    <PostPreview
+                                        post={post}
+                                        showPostAuthor={true}
+                                    />
+                                </div>
+                            ))}
+                        </Masonry>
+                    ) : activeTab === "liked" && user.likedPosts.length <= 0 ? (
+                        "Empty Liked Posts"
+                    ) : (
+                        <Masonry
+                            className="px-12 py-6"
+                            columnsCount={4}
+                            gutter="1rem"
+                        >
+                            {user.likedPosts.map((post) => (
+                                <div
+                                    key={post.id}
+                                    className="break-inside-avoid w-full"
+                                >
+                                    <PostPreview
+                                        post={post}
+                                        showPostAuthor={true}
+                                    />
                                 </div>
                             ))}
                         </Masonry>

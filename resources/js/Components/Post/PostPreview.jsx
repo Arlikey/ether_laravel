@@ -2,7 +2,7 @@ import { Link, usePage } from "@inertiajs/react";
 import UserAvatar from "../User/UserAvatar";
 import { getRelativeDate } from "@/dataFormatting";
 
-export default function PostPreview({ post, isSavings }) {
+export default function PostPreview({ post, showPostAuthor }) {
     const { auth } = usePage().props;
     const textColorClass = post.media
         ? "text-white post-preview-text-white"
@@ -38,7 +38,7 @@ export default function PostPreview({ post, isSavings }) {
                         } text-xl`}
                     ></i>
                 </span>
-                {auth.user?.id !== post.user.id && isSavings && (
+                {auth.user?.id !== post.user.id && showPostAuthor && (
                     <div className="flex items-center gap-2 absolute left-4 top-2">
                         <UserAvatar
                             size={32}

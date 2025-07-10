@@ -46,7 +46,10 @@ class ProfileController extends Controller
             'user_posts' => $withLikesAndSaved,
             'saved_posts' => function ($query) use ($withLikesAndSaved) {
                 $withLikesAndSaved($query->with('user.profile'));
-            }
+            },
+            'liked_posts' => function ($query) use ($withLikesAndSaved) {
+                $withLikesAndSaved($query->with('user.profile'));
+            },
         ]);
 
         return Inertia::render('Profile/Profile', [
