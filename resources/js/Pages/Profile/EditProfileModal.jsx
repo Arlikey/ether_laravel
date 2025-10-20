@@ -39,6 +39,7 @@ export default function EditProfileModal({ edit, setEdit, user, setUser }) {
             toast.success("Profile successfully updated!");
             setEdit(false);
             router.reload();
+            setErrors([]);
         } catch (error) {
             setErrors(error.response.data.errors);
         } finally {
@@ -60,10 +61,10 @@ export default function EditProfileModal({ edit, setEdit, user, setUser }) {
             onClose={() => setEdit(false)}
             enctype="multipart/form-data"
         >
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="flex flex-col sm:block items-center p-6 space-y-4">
                 <h2 className="text-xl font-semibold">Edit Profile</h2>
-                <div className="flex">
-                    <div className="relative mr-4 group rounded-full shadow-md max-w-44">
+                <div className="gap-4 items-center flex flex-col sm:flex-row">
+                    <div className="relative group rounded-full shadow-md max-w-44">
                         <UserAvatar
                             size={176}
                             avatar={
@@ -102,7 +103,7 @@ export default function EditProfileModal({ edit, setEdit, user, setUser }) {
                             <i className="bi bi-pencil text-3xl"></i>
                         </div>
                     </div>
-                    <div className="flex flex-col flex-1 justify-around">
+                    <div className="gap-4 flex flex-col flex-1 justify-around">
                         <div>
                             <InputLabel htmlFor="fullname" value="Full name" />
                             <TextInput

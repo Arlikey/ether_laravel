@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import PrimaryButton from "./PrimaryButton";
-import { toast } from "react-toastify";
+import PrimaryButton from "../PrimaryButton";
 
 export function FollowButton({
     isFollowing: initialFollowing,
@@ -41,14 +40,14 @@ export function FollowButton({
             as="button"
             onClick={handleFollow}
             disabled={loading}
-            className="flex gap-1 w-32 justify-center"
+            className="flex gap-1 w-fit justify-center"
         >
             <i
                 className={`bi ${
                     isFollowing ? "bi-x-circle" : "bi-plus-circle"
                 } text-base`}
             />
-            <span>{isFollowing ? "Unfollow" : "Follow"}</span>
+            <span className="hidden sm:inline">{isFollowing ? "Unfollow" : "Follow"}</span>
         </PrimaryButton>
     );
 }

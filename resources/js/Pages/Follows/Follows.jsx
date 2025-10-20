@@ -39,27 +39,25 @@ export default function Friends({
             <Head title="Follows" />
 
             <div className="flex flex-1 flex-col mt-2">
-                <div className="flex ml-8">
+                <div className="flex justify-center border-b border-gray-300 mx-4 sm:mx-8">
                     <NavButton
-                        className="py-2 px-6"
+                        className="flex-1 sm:flex-none py-2 px-6 justify-center"
                         active={activeTab === "following"}
                         onClick={() => setActiveTab("following")}
                     >
-                        <span className="flex text-lg gap-2">
-                            <i className="bi bi-person-check"></i>Following
-                        </span>
+                        <i className="bi bi-person-check text-lg sm:text-xl mr-2"></i>
+                        Following
                     </NavButton>
                     <NavButton
-                        className="py-2 px-6"
+                        className="flex-1 sm:flex-none py-2 px-6 justify-center"
                         active={activeTab === "followers"}
                         onClick={() => setActiveTab("followers")}
                     >
-                        <span className="flex text-lg gap-2">
-                            <i className="bi bi-person-add"></i>Followers
-                        </span>
+                        <i className="bi bi-person-add text-lg sm:text-xl mr-2"></i>
+                        Followers
                     </NavButton>
                 </div>
-                <div className="flex flex-col flex-1 gap-4 my-6 px-8">
+                <div className="flex flex-col flex-1 gap-4 my-6 px-4 sm:px-8 md:px-16 lg:px-32">
                     {activeTab === "following" ? (
                         followings.length === 0 ? (
                             <div className="flex flex-1 items-center justify-center">

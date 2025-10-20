@@ -56,13 +56,13 @@ export default function PostCreate() {
             <form
                 onSubmit={submit}
                 encType="multipart/form-data"
-                className="flex flex-col flex-1 py-20 px-28"
+                className="flex flex-col flex-1 py-8 px-4 sm:px-10 lg:px-28"
             >
                 <div className="border-b border-gray-300 p-4">
                     <h2 className="text-3xl text-gray-700">Create Post</h2>
                 </div>
-                <div className="flex flex-1">
-                    <div className="flex flex-1 basis-3/12 justify-start flex-col border-r border-gray-300 py-4">
+                <div className="flex flex-col lg:flex-row flex-1">
+                    <div className="flex flex-1 basis-3/12 justify-start flex-col py-4">
                         <div className="flex px-6">
                             <TextInput
                                 id="title"
@@ -94,58 +94,85 @@ export default function PostCreate() {
                         </div>
                     </div>
                     <div className="flex flex-1 p-6 flex-col">
-                        <div className="flex flex-col flex-1">
-                            {previews.length > 0 ? (
-                                <div className="grid grid-cols-4 gap-4 mb-4">
-                                    {previews.map((file, index) => (
-                                        <div key={index} className="relative">
-                                            <img
-                                                src={file.url}
-                                                alt={file.name}
-                                                className="w-full h-full object-cover rounded shadow"
-                                            />
-                                        </div>
-                                    ))}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                            {previews.map((file, index) => (
+                                <div key={index} className="relative group">
+                                    <img
+                                        src={file.url}
+                                        alt={file.name}
+                                        className="w-full h-40 object-cover rounded shadow"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setData(
+                                                "media",
+                                                data.media.filter(
+                                                    (_, i) => i !== index
+                                                )
+                                            )
+                                        }
+                                        className="absolute top-1 right-1 bg-black/60 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition"
+                                    >
+                                        ✕
+                                    </button>
                                 </div>
-                            ) : (
-                                <div className="flex flex-1 flex-col justify-center items-center text-xl gap-2 text-gray-400">
-                                    <i class="bi bi-card-image text-6xl"></i>
-                                    Nothing to see here… yet.
-                                </div>
-                            )}
+                            ))}
                         </div>
+
                         <Dropzone
                             onDrop={(acceptedFiles) => {
-                                if (
-                                    data.media.length + acceptedFiles.length >
-                                    8
-                                ) {
+                                const validFiles = acceptedFiles.filter(
+                                    (f) => f.size <= 20 * 1024 * 1024
+                                );
+                                if (validFiles.length < acceptedFiles.length) {
+                                    toast.error(
+                                        "Some files are too large (max 20MB)."
+                                    );
+                                }
+
+                                const newFiles = [...data.media, ...validFiles];
+                                if (newFiles.length > 8) {
                                     toast.error(
                                         "You can upload up to 8 images."
                                     );
                                     return;
                                 }
 
-                                setData("media", [
-                                    ...data.media,
-                                    ...acceptedFiles,
-                                ]);
+                                setData("media", newFiles);
                             }}
                             accept={{
                                 "image/jpeg": [".jpeg", ".jpg"],
                                 "image/png": [".png"],
+                                "video/mp4": [".mp4"],
                             }}
                         >
-                            {({ getRootProps, getInputProps }) => (
+                            {({
+                                getRootProps,
+                                getInputProps,
+                                isDragActive,
+                            }) => (
                                 <section className="flex flex-1">
                                     <div
                                         {...getRootProps()}
-                                        className="flex flex-1 items-center justify-center border border-dashed border-gray-300 rounded-md cursor-pointer"
+                                        className={`flex flex-1 items-center justify-center border-2 border-dashed rounded-md cursor-pointer transition-colors ${
+                                            isDragActive
+                                                ? "border-purple-500 bg-purple-50"
+                                                : "border-gray-300"
+                                        }`}
                                     >
                                         <input {...getInputProps()} />
                                         <div className="flex flex-col text-lg items-center text-gray-700">
-                                            <i className="bi bi-cloud-arrow-up text-6xl"></i>
-                                            Drag and drop, or click to upload
+                                            <i className="bi bi-cloud-arrow-up text-5xl"></i>
+                                            <p className="text-sm mt-2">
+                                                Drag & drop or{" "}
+                                                <span className="font-semibold">
+                                                    click to upload
+                                                </span>
+                                            </p>
+                                            <p className="text-xs text-gray-500">
+                                                (max 8 files, 20MB each)
+                                            </p>
                                         </div>
                                     </div>
                                 </section>
@@ -161,7 +188,14 @@ export default function PostCreate() {
                         </SecondaryButton>
                     </Link>
                     <PrimaryButton disabled={loading}>
-                        <span className="text-base">Publish</span>
+                        {loading ? (
+                            <span className="flex items-center gap-2">
+                                <i className="bi bi-arrow-repeat animate-spin" />{" "}
+                                Publishing…
+                            </span>
+                        ) : (
+                            <span className="text-base">Publish</span>
+                        )}
                     </PrimaryButton>
                 </div>
             </form>
@@ -234,7 +268,7 @@ function Toolbar({ setData }) {
             <div
                 id="editor"
                 ref={editorRef}
-                className="bg-white border border-t-0 border-gray-300 rounded-b-md max-h-[calc(100vh-32rem)]"
+                className="bg-white border border-t-0 border-gray-300 rounded-b-md"
             ></div>
         </div>
     );

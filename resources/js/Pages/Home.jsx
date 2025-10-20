@@ -10,6 +10,7 @@ export default function Home() {
 
     const handlePosts = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(route("posts.index"));
             setPosts(response.data);
         } catch (error) {
@@ -32,8 +33,12 @@ export default function Home() {
         >
             <Head title="Home" />
 
-            <div className="flex flex-1 flex-col overflow-y-auto pt-4 gap-6 items-center pb-6">
-                {posts.length > 0 ? (
+            <div className="flex flex-1 flex-col overflow-y-auto sm:pt-4 sm:gap-6 items-center sm:pb-6">
+                {loading ? (
+                    <div className="flex flex-1 items-center justify-center">
+                        <i className="bi bi-arrow-repeat animate-spin text-5xl text-purple-600" />
+                    </div>
+                ) : posts.length > 0 ? (
                     posts.map((post) => (
                         <Post
                             key={post.id}

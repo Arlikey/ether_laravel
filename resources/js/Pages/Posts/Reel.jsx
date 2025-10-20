@@ -19,7 +19,7 @@ export default function Reel({ post }) {
             }}
         >
             <Head title="Create" />
-            <div className="flex flex-1 py-4 justify-center overflow-y-auto">
+            <div className="flex flex-1 sm:py-4 justify-center overflow-y-auto">
                 <Post post={post}/>
             </div>
         </AuthenticatedLayout>

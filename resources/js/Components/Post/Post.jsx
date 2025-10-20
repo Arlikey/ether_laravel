@@ -71,14 +71,25 @@ function CommentList({ comments }) {
                     key={comment.id}
                     className="flex gap-2 items-start border-t px-2 pt-2"
                 >
-                    <UserAvatar
-                        size={32}
-                        avatar={comment.user.profile?.avatar}
-                        alt={comment.user.username}
-                    />
+                    <Link
+                        href={route("profile.index", comment.user.slug)}
+                        className="flex gap-2 items-start flex-shrink-0"
+                    >
+                        <UserAvatar
+                            size={32}
+                            avatar={comment.user.profile?.avatar}
+                            alt={comment.user.username}
+                        />
+                    </Link>
+
                     <div className="flex flex-1 flex-col">
                         <div className="flex justify-between">
-                            <span>{comment.user.username}</span>
+                            <Link
+                                href={route("profile.index", comment.user.slug)}
+                                className="font-semibold"
+                            >
+                                {comment.user.username}
+                            </Link>
                             <span className="text-sm text-gray-600">
                                 {getRelativeDate(comment.created_at)}
                             </span>
@@ -212,9 +223,9 @@ export default function Post({ post: initialPost, className = "" }) {
 
     return (
         <div
-            className={`w-[680px] flex flex-col items-start gap-4 rounded-2xl shadow-md bg-white p-6 pb-0 h-fit ${className}`}
+            className={`w-full max-w-[680px] flex flex-col items-start gap-4 sm:rounded-2xl sm:shadow-md bg-white p-4 sm:p-6 pb-0 sm:pb-0 h-fit mx-auto ${className}`}
         >
-            <div className="flex justify-between items-center w-full">
+            <div className="flex flex-wrap justify-between items-center w-full gap-2">
                 <PostHeader user={post.user} createdAt={post.created_at} />
                 <PostDropdown
                     postId={post.id}
@@ -228,19 +239,21 @@ export default function Post({ post: initialPost, className = "" }) {
 
             <div className="flex flex-col w-full gap-4 overflow-y-auto">
                 {post.title && (
-                    <div className="text-3xl font-bold">{post.title}</div>
+                    <div className="text-2xl sm:text-3xl font-bold">
+                        {post.title}
+                    </div>
                 )}
                 {post.media?.length > 0 && <PostImages images={post.media} />}
                 {post.description && (
                     <div
-                        className="ql-editor prose prose-neutral w-full pl-2"
+                        className="ql-editor prose prose-neutral w-full pl-1 sm:pl-2 text-base sm:text-lg"
                         dangerouslySetInnerHTML={{ __html: post.description }}
                     />
                 )}
             </div>
 
-            <div className="w-full flex items-center justify-between text-gray-600">
-                <div className="flex gap-6">
+            <div className="w-full flex flex-wrap justify-between items-center gap-4 text-gray-600">
+                <div className="flex gap-4 sm:gap-6 items-center">
                     <div className="flex gap-2 items-center">
                         <span className="text-xl tabular-nums">
                             {post.likesCount}
@@ -270,7 +283,7 @@ export default function Post({ post: initialPost, className = "" }) {
                         />
                     </div>
                 </div>
-                <div className="flex gap-6">
+                <div className="flex gap-4 sm:gap-6">
                     <button
                         type="button"
                         className="flex items-center text-xl text-gray-700 cursor-pointer hover:scale-110 hover:text-gray-900 active:text-gray-700 transition duration-100"
@@ -279,19 +292,14 @@ export default function Post({ post: initialPost, className = "" }) {
                     >
                         <i className="bi bi-link-45deg"></i>
                     </button>
-                    <button
-                        type="button"
-                        className="flex items-center"
-                        aria-label="Report post"
-                    >
-                        <i className="bi bi-flag text-xl"></i>
-                    </button>
                 </div>
             </div>
 
             <div
-                className={`w-full transition-all duration-200 rounded-lg overflow-hidden bg-white max-h-0 opacity-0 ${
-                    commentsOpen && "max-h-[1000px] opacity-100 pb-6"
+                className={`w-full transition-all duration-300 overflow-hidden ${
+                    commentsOpen
+                        ? "max-h-[80vh] opacity-100 pb-6"
+                        : "max-h-0 opacity-0"
                 }`}
             >
                 <div className="w-full flex flex-col gap-4">
@@ -311,7 +319,7 @@ export default function Post({ post: initialPost, className = "" }) {
             <Modal
                 show={showDeleteModal}
                 onClose={() => setShowDeleteModal(false)}
-                maxWidth="lg"
+                maxWidth="sm"
             >
                 <div className="flex flex-col p-4 gap-6">
                     <div className="flex justify-between items-center">

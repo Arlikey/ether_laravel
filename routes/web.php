@@ -8,8 +8,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\PostSavingController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\User\UserController;
-use Illuminate\Foundation\Application;
+use FFMpeg\FFMpeg;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -65,6 +64,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/post/{post}/save', [PostSavingController::class, 'store'])->name('posts.save');
     Route::delete('/post/{post}/save', [PostSavingController::class, 'destroy'])->name('posts.unsave');
     Route::post('/post/{post}/comments', [PostCommentController::class, 'store'])->name('comments.store');
+});
+
+Route::get('/ffmpeg-check', function () {
+    try {
+        $ffmpeg = FFMpeg::create([
+            'ffmpeg.binaries' => 'C:\Program Files\ffmpeg-7.1.1-essentials_build\bin\ffmpeg.exe',
+            'ffprobe.binaries' => 'C:\Program Files\ffmpeg-7.1.1-essentials_build\bin\ffprobe.exe',
+        ]);
+        return 'FFMpeg and FFProbe loaded successfully.';
+    } catch (Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
+Route::fallback(function () {
+    return Inertia::render('Errors/NotFound')->toResponse(request())->setStatusCode(404);
 });
 
 require __DIR__ . '/auth.php';

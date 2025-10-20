@@ -11,11 +11,12 @@ export default function PostPreview({ post, showPostAuthor }) {
     return (
         <Link
             href={route("posts.show", post.id)}
-            className="flex flex-col items-start gap-4 rounded-2xl shadow-md bg-white overflow-hidden max-h-[600px]"
+            className="flex flex-col items-start gap-4 rounded-2xl shadow-md bg-white overflow-hidden 
+            transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:scale-[1.01]"
         >
             <div className="flex flex-col w-full h-full relative pointer-events-none">
                 <span
-                    className={`absolute right-4 top-2 text-lg ${textColorClass}`}
+                    className={`absolute right-4 top-2 text-sm sm:text-base md:text-lg ${textColorClass}`}
                 >
                     {getRelativeDate(post.created_at)}
                 </span>
@@ -60,7 +61,7 @@ export default function PostPreview({ post, showPostAuthor }) {
                 ) : (
                     <div className="post-preview-no-media ql-editor prose">
                         {post.title && (
-                            <div className="text-3xl font-bold">
+                            <div className="text-2xl sm:text-3xl font-bold leading-tight">
                                 {post.title}
                             </div>
                         )}

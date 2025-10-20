@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PostResource;
 use App\Models\UserPost;
 use Exception;
+use FFMpeg\Coordinate\Dimension;
+use FFMpeg\Coordinate\TimeCode;
+use FFMpeg\FFMpeg;
+use FFMpeg\Format\Video\X264;
 use File;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -32,7 +36,7 @@ class PostController extends Controller
         $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'media.*' => 'file|mimes:jpg,jpeg,png,mp4|max:20480',
+            'media.*' => 'required|file|mimes:jpg,jpeg,png,mp4,webm|max:102400',
         ]);
 
         if (
@@ -66,13 +70,13 @@ class PostController extends Controller
                 $extension = $file->getClientOriginalExtension();
                 $filename = Str::uuid() . '.' . $extension;
 
-                $originalPath = $file->storeAs('posts/media/originals', $filename, 'public');
-
                 if ($type === 'image') {
                     try {
+                        File::ensureDirectoryExists(storage_path('app/public/posts/media/originals'));
                         File::ensureDirectoryExists(storage_path('app/public/posts/media/medium'));
                         File::ensureDirectoryExists(storage_path('app/public/posts/media/thumbs'));
 
+                        $originalPath = $file->storeAs('posts/media/originals', $filename, 'public');
                         $mediumPath = storage_path("app/public/posts/media/medium/{$filename}");
                         $thumbPath = storage_path("app/public/posts/media/thumbs/{$filename}");
 
@@ -83,6 +87,40 @@ class PostController extends Controller
                         $post->delete();
                         return back()->withErrors([
                             'message' => 'Image processing failed: ' . $e->getMessage(),
+                        ]);
+                    }
+                } else if ($type === "video") {
+                    try {
+                        File::ensureDirectoryExists(storage_path('app/public/posts/media/video/originals'));
+                        File::ensureDirectoryExists(storage_path('app/public/posts/media/video/compressed'));
+                        File::ensureDirectoryExists(storage_path('app/public/posts/media/video/thumbs'));
+
+                        $originalPath = $file->storeAs('posts/media/video/originals', $filename, 'public');
+                        $compressedPath = storage_path("app/public/posts/media/video/compressed/{$filename}");
+
+                        Log::info("before ffmpeg init");
+
+                        $ffmpeg = FFMpeg::create();
+                        Log::info("ffmpeg created");
+                        $video = $ffmpeg->open($file->getPathname());
+                        Log::info("ffmpeg opened path");
+
+
+                        $video->filters()->resize(new Dimension(720, 480))->synchronize();
+                        Log::info("video resized");
+
+                        $video->save(new X264(), $compressedPath);
+                        Log::info("video saved");
+
+
+                        $thumbnailPath = storage_path("app/public/posts/media/video/thumbs/{$filename}");
+
+                        $video->frame(TimeCode::fromSeconds(2))->save($thumbnailPath);
+
+                    } catch (Exception $e) {
+                        $post->delete();
+                        return back()->withErrors([
+                            'message' => 'Video processing failed: ' . $e->getMessage(),
                         ]);
                     }
                 }

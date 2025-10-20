@@ -28,7 +28,7 @@ export default function UserSearch({ onResults }) {
     }, [debouncedQuery]);
 
     return (
-        <div className="flex relative w-1/2 h-9">
+        <div className="flex relative h-9">
             <i className="user-search-icon bi bi-search absolute top-1/2 left-2 text-gray-600"></i>
             <TextInput
                 type="text"
