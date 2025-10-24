@@ -24,11 +24,29 @@ export default function AuthenticatedLayout({ auth, children, header }) {
 
             <div className="flex flex-1 overflow-hidden relative">
                 <aside
-                    className={`fixed top-16 left-0 z-50 h-full transform transition-all duration-300 ease-in-out
-                    ${isSidebarOpen ? "w-64 translate-x-0" : "-translate-x-full"} 
-                     md:static md:w-20 md:translate-x-0 bg-gray-100 shadow-lg md:shadow-none`}
+                    className={`
+                        fixed top-0 left-0 z-50 h-full bg-gray-100 shadow-lg 
+                        transform transition-transform duration-300 ease-in-out
+                        ${
+                            isSidebarOpen
+                                ? "w-64 translate-x-0"
+                                : "-translate-x-full"
+                        }
+                        md:static md:w-20 md:translate-x-0 md:shadow-none
+                    `}
                 >
-                    <Sidebar user={auth?.user} onLinkClick={closeSidebar} />
+                    <button
+                        onClick={closeSidebar}
+                        className="absolute top-4 right-4 text-gray-600 hover:text-black md:hidden"
+                    >
+                        <i className="bi bi-x-lg text-xl"></i>
+                    </button>
+
+                    <Sidebar
+                        className="mt-16"
+                        user={auth?.user}
+                        onLinkClick={closeSidebar}
+                    />
                 </aside>
 
                 {isSidebarOpen && (

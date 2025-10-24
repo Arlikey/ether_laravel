@@ -1,11 +1,11 @@
 import NavLink from "@/Components/NavLink";
 import { usePage } from "@inertiajs/react";
 
-export default function Sidebar({ user, onLinkClick }) {
+export default function Sidebar({ user, onLinkClick, className }) {
     const { component } = usePage();
 
     return (
-        <nav className="h-full flex flex-col py-6 w-full">
+        <nav className={`${className} h-full flex flex-col py-6 w-full`}>
             <NavLink
                 href={route("home")}
                 className="flex flex-col items-center py-3"
