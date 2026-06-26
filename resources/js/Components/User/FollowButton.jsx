@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PrimaryButton from "../PrimaryButton";
+import { toast } from "react-toastify";
 
 export function FollowButton({
     isFollowing: initialFollowing,
